@@ -1,0 +1,31 @@
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/.vs/
+/.idea/
+/*.csproj
+/*.sln
+/*.suo
+/*.user
+/*.userprefs
+/*.pidb
+/*.booproj
+/*.svd
+/*.pdb
+/*.mdb
+/*.opendb
+/*.VC.db
+/sysinfo.txt
+/.DS_Store
+/Thumbs.db
+/upload-review.txt
+/Assets/Prefabs/3D StudentsAssets/Cabin/wood_plank_ui2leaxlw/ui2leaxlw_8K_Displacement.exr
+/Assets/Prefabs/3D StudentsAssets/Cabin/wood_plank_ujlndfvn/ujlndfvn_8K_Displacement.exr
+/Assets/Prefabs/3D StudentsAssets/Cabin/wood_planks_thjwbdoaw/thjwbdoaw_8K_Displacement.exr
+/Assets/Prefabs/3D StudentsAssets/Cabin/wood_planks_thjwbdoaw/thjwbdoaw_8K_Normal.jpg
+/Assets/Prefabs/3D StudentsAssets/Tombstone/concrete_rough_ulmmbiuo/ulmmbiuo_8K_Displacement.exr
+/Assets/Prefabs/3D StudentsAssets/Tower/Ladder/wood_plank_ui2leaxlw/ui2leaxlw_8K_Displacement.exr
