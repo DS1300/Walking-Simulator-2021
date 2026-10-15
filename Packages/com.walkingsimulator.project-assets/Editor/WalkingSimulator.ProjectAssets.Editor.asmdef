@@ -1,0 +1,5 @@
+{
+  "name": "WalkingSimulator.ProjectAssets.Editor",
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}
