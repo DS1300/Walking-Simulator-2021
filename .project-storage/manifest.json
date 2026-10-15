@@ -1,0 +1,109 @@
+[
+  {
+    "path": "Assets/Prefabs/3D StudentsAssets/Cabin/wood_plank_ui2leaxlw/ui2leaxlw_8K_Displacement.exr",
+    "parts": [
+      {
+        "path": ".project-storage/01.001.part",
+        "bytes": 83886080,
+        "sha256": "0a83eb2063bc137f354ef64df87b59c0f11cfe863655faceed801cfc37848879"
+      },
+      {
+        "path": ".project-storage/01.002.part",
+        "bytes": 83475518,
+        "sha256": "dc95f167a73f8c7856e4d5cbe0effd152a475d42c9fcf258436d6af09297ca2a"
+      }
+    ],
+    "sha256": "551161ceba517de7e39acd9cf81b5e8ce3e6aa3a56277cc0c1dff4a4d53ca3ef",
+    "bytes": 167361598
+  },
+  {
+    "path": "Assets/Prefabs/3D StudentsAssets/Cabin/wood_plank_ujlndfvn/ujlndfvn_8K_Displacement.exr",
+    "parts": [
+      {
+        "path": ".project-storage/02.001.part",
+        "bytes": 83886080,
+        "sha256": "85ac5e36a368a963631d43cfd1735f9ce74edbdd8fc2189d16d1339aa255e874"
+      },
+      {
+        "path": ".project-storage/02.002.part",
+        "bytes": 49692302,
+        "sha256": "1572ff275100def728755948edac58a5bcba0ac3cae166263e90a93dcd4febb7"
+      }
+    ],
+    "sha256": "ed1411725f22226cbcf44f42b3e02490cea0daf5785c25f4e057f9d31e408009",
+    "bytes": 133578382
+  },
+  {
+    "path": "Assets/Prefabs/3D StudentsAssets/Cabin/wood_planks_thjwbdoaw/thjwbdoaw_8K_Displacement.exr",
+    "parts": [
+      {
+        "path": ".project-storage/03.001.part",
+        "bytes": 83886080,
+        "sha256": "ab0417a566113280bc23725bdc7bb7d2dc02561f9d33f058ba0a02e9f530c108"
+      },
+      {
+        "path": ".project-storage/03.002.part",
+        "bytes": 77757923,
+        "sha256": "72790235f4235b582213dbf2497ef7c92d4eccd73823d7e1a7e51c57a1197a5c"
+      }
+    ],
+    "sha256": "dad2d72a03703533d5ce9a355b79160b68485ec05336fe34426dfd48d9dd12d6",
+    "bytes": 161644003
+  },
+  {
+    "path": "Assets/Prefabs/3D StudentsAssets/Cabin/wood_planks_thjwbdoaw/thjwbdoaw_8K_Normal.jpg",
+    "parts": [
+      {
+        "path": ".project-storage/04.001.part",
+        "bytes": 83886080,
+        "sha256": "e5de8366e124f687cea09d75d281a0ff2d5a3ec7d9f0323204823893177ca534"
+      },
+      {
+        "path": ".project-storage/04.002.part",
+        "bytes": 24388805,
+        "sha256": "0d5f769f7974f9453da3b3c77175e09f51dfcfd12e479eb401b5434aa7d922d0"
+      }
+    ],
+    "sha256": "25535d08483de37c1d73d5611ec959d2ae4f7232b0c54893cea9cdd2740e6f99",
+    "bytes": 108274885
+  },
+  {
+    "path": "Assets/Prefabs/3D StudentsAssets/Tombstone/concrete_rough_ulmmbiuo/ulmmbiuo_8K_Displacement.exr",
+    "parts": [
+      {
+        "path": ".project-storage/05.001.part",
+        "bytes": 83886080,
+        "sha256": "bcc6437f3e4fdcd572ef391d767f0239b851df65160195817a69dd30b6f611d9"
+      },
+      {
+        "path": ".project-storage/05.002.part",
+        "bytes": 83886080,
+        "sha256": "b2ecfb08ad5e7879eb3baa0d40875e10060bdece4832fecbb9b02541bd1c6f3b"
+      },
+      {
+        "path": ".project-storage/05.003.part",
+        "bytes": 17665925,
+        "sha256": "05e963cadc2745bdb4af09e9d6d9d2c093e80bc5398074819559598baca56cc1"
+      }
+    ],
+    "sha256": "be133444454028a2928efe18e04973e097319eff8ad729dcaab2f7923f1d5cd2",
+    "bytes": 185438085
+  },
+  {
+    "path": "Assets/Prefabs/3D StudentsAssets/Tower/Ladder/wood_plank_ui2leaxlw/ui2leaxlw_8K_Displacement.exr",
+    "parts": [
+      {
+        "path": ".project-storage/06.001.part",
+        "bytes": 83886080,
+        "sha256": "0a83eb2063bc137f354ef64df87b59c0f11cfe863655faceed801cfc37848879"
+      },
+      {
+        "path": ".project-storage/06.002.part",
+        "bytes": 83475518,
+        "sha256": "dc95f167a73f8c7856e4d5cbe0effd152a475d42c9fcf258436d6af09297ca2a"
+      }
+    ],
+    "sha256": "551161ceba517de7e39acd9cf81b5e8ce3e6aa3a56277cc0c1dff4a4d53ca3ef",
+    "bytes": 167361598
+  }
+]
