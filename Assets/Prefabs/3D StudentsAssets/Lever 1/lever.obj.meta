@@ -23,6 +23,7 @@ ModelImporter:
     6400002: Mesh2_Component_39_1_Component_42_1_Model
   externalObjects: {}
   materials:
+    materialImportMode: 2
     importMaterials: 1
     materialName: 0
     materialSearch: 1
