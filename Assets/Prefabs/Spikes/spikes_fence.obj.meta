@@ -237,6 +237,7 @@ ModelImporter:
     6400074: Mesh9_Group9_Component_44_1_Model
   externalObjects: {}
   materials:
+    materialImportMode: 2
     importMaterials: 1
     materialName: 0
     materialSearch: 1

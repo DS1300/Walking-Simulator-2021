@@ -64,7 +64,7 @@ public class PauseMenu : MonoBehaviour
 		fovSlider = Camera.main.fieldOfView;
 		
 		camMouseLook = Camera.main.GetComponent<MouseLook>();
-		capsuleMouseLook = GameObject.FindWithTag("Player").GetComponent<MouseLook>();
+		capsuleMouseLook = Camera.main.transform.parent.GetComponentInParent<MouseLook>();
 		sensitivitySlider = capsuleMouseLook.sensitivityX;
 		
 		// save the default values

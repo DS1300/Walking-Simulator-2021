@@ -32,13 +32,14 @@ public class Bible2 : MonoBehaviour
 
     void Start()
     {
-        startColour = objectRendererToChange.material;
+        if (objectRendererToChange != null)
+            startColour = objectRendererToChange.material;
     }
 
 
     void Update()
     {
-        if (resetTime != 0f && resetTime < Time.time)
+        if (objectRendererToChange != null && resetTime != 0f && resetTime < Time.time)
         {
             objectRendererToChange.material = startColour;
         }
@@ -51,8 +52,11 @@ public class Bible2 : MonoBehaviour
                 objectToActivate.SetActive(activateState);
             }
          
-            objectRendererToChange.material = activateColour;
-            resetTime = Time.time + timeToReset;
+            if (objectRendererToChange != null && activateColour != null)
+            {
+                objectRendererToChange.material = activateColour;
+                resetTime = Time.time + timeToReset;
+            }
         }
 
 
