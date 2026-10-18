@@ -16,6 +16,7 @@ using System.Collections;
 public class PauseMenu : MonoBehaviour
 {
 	public static bool paused = false;
+	public WalkingSimulator.Presentation.MainMenu menuUI;
 	
 	public float minFOV = 45.0f;
 	public float maxFOV = 100.0f;
@@ -96,12 +97,14 @@ public class PauseMenu : MonoBehaviour
 	{
 		if( Input.GetKeyDown(KeyCode.Escape) )
 		{
-			PauseGame();
+			if(menuUI != null && paused) menuUI.HandlePauseEscape();
+			else PauseGame();
 		}
 	}
 	
 	void OnGUI()
 	{
+		if(menuUI != null) return;
 		if( paused )
 		{
 			
@@ -247,7 +250,10 @@ public class PauseMenu : MonoBehaviour
 	public void PauseGame()
 	{
 		paused = !paused;
-		Time.timeScale = 1.0f - Time.timeScale;
+		Time.timeScale = paused ? 0f : 1f;
+		Cursor.visible = paused;
+		Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
+		if(menuUI != null) menuUI.SetPauseVisible(paused);
 		
 		// pause or unpause the music
 		if( paused )

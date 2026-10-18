@@ -62,8 +62,8 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.render-pipelines.core": "7.3.1",
-        "com.unity.shadergraph": "7.3.1"
+        "com.unity.shadergraph": "7.3.1",
+        "com.unity.render-pipelines.core": "7.3.1"
       },
       "url": "https://packages.unity.com"
     },
@@ -124,6 +124,12 @@
       "dependencies": {
         "com.unity.modules.ui": "1.0.0"
       }
+    },
+    "com.walkingsimulator.project-assets": {
+      "version": "file:com.walkingsimulator.project-assets",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
