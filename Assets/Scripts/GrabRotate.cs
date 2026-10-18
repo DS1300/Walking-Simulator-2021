@@ -47,8 +47,12 @@ public class GrabRotate : MonoBehaviour
         SetRotation(Input.GetKey(KeyCode.R));
         if (rotating)
         {
-            holdRotation = Quaternion.AngleAxis(-Input.GetAxis("Mouse X") * rotationSpeed, playerCam.transform.up)
-                * Quaternion.AngleAxis(Input.GetAxis("Mouse Y") * rotationSpeed, playerCam.transform.right) * holdRotation;
+            Vector2 rotationInput = Vector2.ClampMagnitude(new Vector2(
+                -Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * rotationSpeed, 30f);
+            holdRotation = Quaternion.RotateTowards(grabbedobjects.rotation, holdRotation, 60f);
+            holdRotation = Quaternion.AngleAxis(rotationInput.x, playerCam.transform.up)
+                * Quaternion.AngleAxis(rotationInput.y, playerCam.transform.right) * holdRotation;
+            holdRotation = Quaternion.RotateTowards(grabbedobjects.rotation, holdRotation, 60f);
         }
     }
 
