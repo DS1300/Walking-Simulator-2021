@@ -67,13 +67,7 @@ public class PlayerMovement : InterpolatedTransform
 
     public override void Update()
     {
-        Vector3 newestTransform = m_lastPositions[m_newTransformIndex];
-        Vector3 olderTransform = m_lastPositions[OldTransformIndex()];
-
-        Vector3 adjust = Vector3.Lerp(olderTransform, newestTransform, InterpolationController.InterpolationFactor);
-        adjust -= transform.position;
-
-        controller.Move(adjust);
+        base.Update();
 
         if (forceTime > 0)
             forceTime -= Time.deltaTime;

@@ -6,6 +6,8 @@ public class CrosshairGUI : MonoBehaviour
 {
     public Texture2D m_crosshairTexture;
     public Texture2D m_useTexture;
+    public Texture2D m_lockTexture;
+    private bool locked;
     public float RayLength = 3f;
 
     public bool m_DefaultReticle;
@@ -22,6 +24,7 @@ public class CrosshairGUI : MonoBehaviour
         playerCam = Camera.main;
         Ray playerAim = playerCam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
+        locked = false;
 
         if (Physics.Raycast(playerAim, out hit, RayLength))
         {
@@ -76,6 +79,17 @@ public class CrosshairGUI : MonoBehaviour
             m_DefaultReticle = true;
             m_UseReticle = false;
         }
+        RaycastHit doorHit;
+        if (Physics.Raycast(playerAim, out doorHit, RayLength, ~0, QueryTriggerInteraction.Ignore))
+        {
+            var door = doorHit.collider.GetComponentInParent<DoorFeedback>();
+            if (door != null)
+            {
+                locked = door.IsLocked;
+                m_DefaultReticle = false;
+                m_UseReticle = !locked;
+            }
+        }
         /*
     if(!m_ShowCursor){
         Cursor.visible = (false);
@@ -110,6 +124,14 @@ public class CrosshairGUI : MonoBehaviour
 
     void OnGUI()
     {
+        if (Time.timeScale == 0f) return;
+        m_crosshairRect.x = (Screen.width - m_crosshairRect.width) / 2;
+        m_crosshairRect.y = (Screen.height - m_crosshairRect.height) / 2;
+        if (locked && m_lockTexture != null)
+        {
+            GUI.DrawTexture(m_crosshairRect, m_lockTexture);
+            return;
+        }
         if (m_bIsCrosshairVisible)
             if (m_DefaultReticle)
             {
