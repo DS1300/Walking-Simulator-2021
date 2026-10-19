@@ -11,6 +11,6 @@ public class FireLight : MonoBehaviour
         if (fireLight == null) return;
         bool burning = fire != null && fire.isPlaying;
         fireLight.enabled = burning;
-        if (burning) fireLight.intensity = intensity * (.95f + .05f * Mathf.Sin(Time.time * 4f));
+        if (burning) fireLight.intensity = intensity;
     }
 }

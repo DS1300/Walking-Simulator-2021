@@ -16,6 +16,10 @@ namespace WalkingSimulator.Presentation
         public TMP_FontAsset buttonFont, italicFont, valueFont;
         public bool isPauseMenu;
         public PauseMenu pauseController;
+        public Notes journal;
+        public GameObject journalPanel;
+        public Button[] journalButtons;
+        public static bool AudioSettingsOpen { get; private set; }
         public TMP_FontAsset bodyFont;
         public string gameScene = "The Game";
         [SerializeField] GameObject ui, home, settings, confirmation;
@@ -115,6 +119,8 @@ namespace WalkingSimulator.Presentation
                     case "Resume":
                     case "Play Now": button.onClick.AddListener(PlayNow);break;
                     case "Settings": button.onClick.AddListener(ShowSettings);break;
+                    case "Journal": button.onClick.AddListener(ShowJournal);break;
+                    case "Journal Back": button.onClick.AddListener(ShowHome);break;
                     case "Exit": button.onClick.AddListener(Exit);break;
                     case "Apply": button.onClick.AddListener(ApplySettings);break;
                     case "Back": button.onClick.AddListener(ShowHome);break;
@@ -128,14 +134,23 @@ namespace WalkingSimulator.Presentation
                 }
             }
             volume.onValueChanged.RemoveAllListeners();sensitivity.onValueChanged.RemoveAllListeners();
-            volume.onValueChanged.AddListener(v=>volumeValue.text=Mathf.RoundToInt(v*100)+"%");
+            volume.onValueChanged.AddListener(ChangeVolume);
             sensitivity.onValueChanged.AddListener(v=>sensitivityValue.text=v.ToString("F1"));
+            if (journalPanel != null) journalPanel.SetActive(false);
+            if (journalButtons != null)
+                for (int i=0; i<journalButtons.Length; i++)
+                {
+                    int index=i;
+                    journalButtons[i].onClick.AddListener(()=>journal.OpenCollectedNote(index));
+                }
             settings.SetActive(false);confirmation.SetActive(false);home.SetActive(true); if(isPauseMenu) ui.SetActive(false); else Select(playButton.gameObject);
         }
 
         public void ShowSettings()
         {
             if (loading) return;
+            AudioSettingsOpen = isPauseMenu;
+            if (journalPanel != null) journalPanel.SetActive(false);
             volume.SetValueWithoutNotify(GamePreferences.Volume); volume.onValueChanged.Invoke(volume.value);
             sensitivity.SetValueWithoutNotify(GamePreferences.Sensitivity); sensitivity.onValueChanged.Invoke(sensitivity.value);
             limitIndex=System.Array.IndexOf(limits,PlayerPrefs.GetInt(GamePreferences.Prefix+"FrameLimit",90)); if(limitIndex<0)limitIndex=1; reducedMotion=PlayerPrefs.GetInt(GamePreferences.Prefix+"ReducedMotion",0)==1;
@@ -157,15 +172,40 @@ namespace WalkingSimulator.Presentation
             qualityText.text = QualitySettings.names[qualityIndex] + "  >";
         }
 
+        void ChangeVolume(float value)
+        {
+            volumeValue.text = Mathf.RoundToInt(value * 100) + "%";
+            GamePreferences.SetVolume(value);
+        }
+
+        public void ShowJournal()
+        {
+            if (journal == null || journalPanel == null) return;
+            AudioSettingsOpen = false;
+            home.SetActive(false); settings.SetActive(false); journalPanel.SetActive(true);
+            int row = 0;
+            for (int i=0; i<journalButtons.Length; i++)
+            {
+                bool found = journal.IsCollected(i);
+                journalButtons[i].gameObject.SetActive(found);
+                if (found) journalButtons[i].GetComponent<RectTransform>().anchoredPosition =
+                    new Vector2(140, -310 - 66 * row++);
+            }
+            Select(journalPanel.transform.Find("Journal Back").gameObject);
+        }
+
         public void ShowHome()
         {
+            AudioSettingsOpen = false;
+            PlayerPrefs.Save();
+            if (journalPanel != null) journalPanel.SetActive(false);
             if (confirmation.activeSelf) RevertDisplay();
             settings.SetActive(false); home.SetActive(true); Select(playButton.gameObject);
         }
 
         public void ApplySettings()
         {
-            AudioListener.volume = volume.value;
+            GamePreferences.SetVolume(volume.value);
             foreach(var mouse in FindObjectsOfType<MouseLook>()) mouse.SetSensitivity(sensitivity.value);
             GamePreferences.SetQuality(qualityIndex);
             PlayerPrefs.SetFloat(GamePreferences.Prefix + "Volume", volume.value);
@@ -203,8 +243,8 @@ namespace WalkingSimulator.Presentation
 
         public void PlayNow() { if(isPauseMenu) { pauseController.PauseGame(); return; } if (!loading) StartCoroutine(LoadGame()); }
 
-        public void SetPauseVisible(bool visible) { ui.SetActive(visible); if(visible) ShowHome(); }
-        public void HandlePauseEscape() { if(confirmation.activeSelf) RevertDisplay(); else if(settings.activeSelf) ShowHome(); else pauseController.PauseGame(); }
+        public void SetPauseVisible(bool visible) { if (journal != null && journal.IsReading) journal.CloseNote(); AudioSettingsOpen=false; ui.SetActive(visible); if(visible) ShowHome(); }
+        public void HandlePauseEscape() { if(journal != null && journal.IsReading) journal.CloseNote(); else if(journalPanel != null && journalPanel.activeSelf) ShowHome(); else if(confirmation.activeSelf) RevertDisplay(); else if(settings.activeSelf) ShowHome(); else pauseController.PauseGame(); }
         IEnumerator LoadGame()
         {
             loading = true; foreach (var button in home.GetComponentsInChildren<Button>()) button.interactable = false;
@@ -244,11 +284,11 @@ namespace WalkingSimulator.Presentation
         {
             Label(parent,title,140,y,350,45,24,Ink); var value=Label(parent,"",1000,y,150,45,22,Muted,valueFont);
             var go=new GameObject(title,typeof(RectTransform),typeof(Slider)); Rect(go,parent,560,y+8,400,24); var slider=go.GetComponent<Slider>(); slider.minValue=min;slider.maxValue=max;
-            var bg=new GameObject("Track",typeof(RectTransform),typeof(Image)); Rect(bg,go.transform,0,8,400,4);bg.GetComponent<Image>().color=Muted;
-            var handle=new GameObject("Handle",typeof(RectTransform),typeof(Image)); Rect(handle,go.transform,0,0,16,24);handle.GetComponent<Image>().color=Gold;slider.handleRect=handle.GetComponent<RectTransform>();slider.targetGraphic=handle.GetComponent<Image>();slider.direction=Slider.Direction.LeftToRight;
+            var bg=new GameObject("Track",typeof(RectTransform),typeof(Image)); Rect(bg,go.transform,0,10,400,4);bg.GetComponent<Image>().color=Muted;
+            var handle=new GameObject("Handle",typeof(RectTransform),typeof(Image)); Rect(handle,go.transform,0,0,16,24);handle.GetComponent<Image>().color=Gold;var handleRect=handle.GetComponent<RectTransform>();handleRect.pivot=new Vector2(.5f,.5f);handleRect.sizeDelta=new Vector2(16,0);handleRect.anchoredPosition=Vector2.zero;slider.handleRect=handleRect;slider.targetGraphic=handle.GetComponent<Image>();slider.direction=Slider.Direction.LeftToRight;
             if(title=="Master Volume") volumeValue=value; else sensitivityValue=value;
             slider.onValueChanged.AddListener(v=>value.text=max==1?Mathf.RoundToInt(v*100)+"%":v.ToString("F1"));return slider;
         }
-        void OnDestroy() { if(Application.isPlaying && ui!=null)Destroy(ui); }
+        void OnDestroy() { if(isPauseMenu) AudioSettingsOpen=false; if(Application.isPlaying && ui!=null)Destroy(ui); }
     }
 }

@@ -108,6 +108,17 @@ public class MouseLook : MonoBehaviour
 		sensitivityX = s;
 		sensitivityY = s;
 	}
+
+	public void MatchCurrentRotation()
+	{
+		Vector3 direction = Quaternion.Inverse(originalRotation) * transform.localRotation * Vector3.forward;
+		rotationX = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+		rotationY = Mathf.Clamp(Mathf.Asin(Mathf.Clamp(direction.y, -1f, 1f)) * Mathf.Rad2Deg, minimumY, maximumY);
+		rotArrayX.Clear();
+		rotArrayY.Clear();
+		rotArrayX.Add(rotationX);
+		rotArrayY.Add(rotationY);
+	}
  
 	public static float ClampAngle (float angle, float min, float max)
 	{

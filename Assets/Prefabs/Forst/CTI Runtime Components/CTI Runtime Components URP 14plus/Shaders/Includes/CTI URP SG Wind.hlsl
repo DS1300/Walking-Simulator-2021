@@ -1,4 +1,5 @@
 float4 _CTI_SRP_Wind;
+float3 _CTI_WindPositionOffset;
 float _CTI_SRP_Turbulence;
 
 float3x3 GetRotationMatrix(float3 axis, float angle)
@@ -92,7 +93,7 @@ void CTI_AnimateVertexSG_float(
 //  Store ambient occlusion
     o_colorVariationAmbient = 0;
 
-    const float3 TreeWorldPos = UNITY_MATRIX_M._m03_m13_m23;
+    const float3 TreeWorldPos = UNITY_MATRIX_M._m03_m13_m23 + _CTI_WindPositionOffset;
     
     float sinuswave = sin(timeParams.x * 0.5);
     float shiftedsinuswave = (sinuswave + timeParams.y) * 0.5;

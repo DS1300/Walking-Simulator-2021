@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
         return swimming;
     }
 
-    private void Start()
+    private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
 
@@ -93,7 +93,8 @@ public class PlayerController : MonoBehaviour
         if (GetComponentInChildren<AnimateCameraLevel>())
             animateCamLevel = GetComponentInChildren<AnimateCameraLevel>();
 
-        info = new PlayerInfo(movement.controller.radius, movement.controller.height);
+        var controller = GetComponent<CharacterController>();
+        info = new PlayerInfo(controller.radius, controller.height);
         crouchCamAdjust = (crouchHeight - info.height) / 2f;
         stamina = sprintTime;
     }

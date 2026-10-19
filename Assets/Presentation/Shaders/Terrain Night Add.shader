@@ -92,7 +92,7 @@ Shader "WalkingSimulator/Terrain Night Add"
             {
                 half4 color = TerrainOriginalFragment(IN);
                 float distant = smoothstep(110.0, 240.0, distance(GetCameraPositionWS(), IN.positionWS));
-                color.rgb *= lerp(half3(1,1,1), half3(0.85,0.88,0.92), distant);
+                color.rgb = lerp(color.rgb, dot(color.rgb, half3(0.2126,0.7152,0.0722)) * half3(0.47,0.56,0.64), distant);
                 return color;
             }
             ENDHLSL

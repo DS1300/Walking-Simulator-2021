@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,8 +16,10 @@ public class OpenDoor : MonoBehaviour
     
     void Update()
     {
-        if(Input.GetMouseButtonDown(0) && canOpen)
+        var feedback = anim.GetComponent<DoorFeedback>();
+        if(Input.GetMouseButtonDown(0) && (feedback != null ? feedback.CanOpen : canOpen))
         {
+            if (feedback != null) feedback.MarkOpened();
             anim.Play("Cabin Door 1");
         }
     }

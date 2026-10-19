@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,9 +22,12 @@ public class CrosshairGUI : MonoBehaviour
     void Update()
     {
         playerCam = Camera.main;
+        if (playerCam == null) return;
         Ray playerAim = playerCam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
         locked = false;
+        m_DefaultReticle = true;
+        m_UseReticle = false;
 
         if (Physics.Raycast(playerAim, out hit, RayLength))
         {
@@ -38,7 +41,7 @@ public class CrosshairGUI : MonoBehaviour
                 m_DefaultReticle = false;
                 m_UseReticle = true;
             }
-            if (hit.collider.gameObject.tag == "Door")
+            if (hit.collider.gameObject.tag == "Door" && hit.collider.GetComponentInParent<DoorFeedback>() == null)
             {
                 m_DefaultReticle = false;
                 m_UseReticle = true;
@@ -85,9 +88,10 @@ public class CrosshairGUI : MonoBehaviour
             var door = doorHit.collider.GetComponentInParent<DoorFeedback>();
             if (door != null)
             {
-                locked = door.IsLocked;
-                m_DefaultReticle = false;
-                m_UseReticle = !locked;
+                bool available = door.CanInteract;
+                locked = available && door.IsLocked;
+                m_DefaultReticle = !available;
+                m_UseReticle = available && !locked;
             }
         }
         /*

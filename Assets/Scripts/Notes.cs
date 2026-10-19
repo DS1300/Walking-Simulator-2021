@@ -1,71 +1,112 @@
-﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Notes : MonoBehaviour
 {
     public float RayLength = 3f;
-    private Ray playerAim;
-    private Camera playerCam;
+    public Canvas note;
+    public TextMeshProUGUI noteTitle;
+    public TextMeshProUGUI noteBody;
+    public NotePage[] pages;
+    public TextMeshProUGUI counter;
+    private readonly HashSet<int> collected = new HashSet<int>();
+    public bool IsReading { get { return note != null && note.enabled; } }
+    public bool IsCollected(int index) { return collected.Contains(index); }
+
+    public void OpenCollectedNote(int index)
+    {
+        if (index >= 0 && index < pages.Length && IsCollected(index)) ShowNote(pages[index]);
+    }
+
+    public void CloseNote() { HideNote(); }
+
+    void RefreshCounter()
+    {
+        if (counter != null) counter.text = "Notes: " + collected.Count + "/" + pages.Length;
+    }
 
     private GameObject player;
-    private new GameObject camera;
+    private GameObject playerCamera;
+    private readonly List<Behaviour> pausedControls = new List<Behaviour>();
 
-    public Canvas note;
+    [System.Serializable]
+    public class NotePage
+    {
+        public GameObject noteObject;
+        public string title;
+        [TextArea(8, 20)] public string text;
+    }
 
     void Start()
     {
         player = GameObject.Find("Player X");
-        camera = GameObject.Find("Main Camera");
-
+        playerCamera = GameObject.Find("Main Camera");
         note.enabled = false;
+        RefreshCounter();
     }
 
     void Update()
     {
-        playerCam = Camera.main;
-        Ray playerAim = playerCam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        if (note.enabled)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+                HideNote();
+            return;
+        }
+
+        if (Time.timeScale == 0f || Camera.main == null) return;
+        Ray playerAim = Camera.main.ViewportPointToRay(new Vector3(.5f, .5f, 0));
         RaycastHit hit;
 
-        if (Physics.Raycast(playerAim, out hit, RayLength))
+        if (Input.GetMouseButtonDown(0) && Physics.Raycast(playerAim, out hit, RayLength))
         {
-            if ((hit.collider.gameObject.tag == "Note") && Input.GetMouseButtonDown(0))
+            if (!hit.collider.CompareTag("Note")) return;
+            foreach (var page in pages)
             {
-                ShowNote();
+                if (page.noteObject != null && hit.transform.IsChildOf(page.noteObject.transform))
+                {
+                    ShowNote(page);
+                    break;
+                }
             }
-
-            if (Input.GetKeyDown("e"))
-            {
-                HideNote();
-            }
         }
+    }
 
-        void ShowNote()
-        {
-            note.enabled = true;
+    void ShowNote(NotePage page)
+    {
+        collected.Add(System.Array.IndexOf(pages, page));
+        RefreshCounter();
+        noteTitle.text = page.title;
+        noteBody.text = page.text;
+        note.enabled = true;
 
-            player.GetComponent<MouseLook>().enabled = false;
-            camera.GetComponent<MouseLook>().enabled = false;
+        PauseControl(player.GetComponent<MouseLook>());
+        PauseControl(playerCamera.GetComponent<MouseLook>());
+        PauseControl(player.GetComponent<CrosshairGUI>());
+        PauseControl(player.GetComponent<PlayerController>());
+        PauseControl(player.GetComponent<PlayerMovement>());
+        PauseControl(player.GetComponent<PlayerInput>());
+        PauseControl(playerCamera.GetComponent<HeadBob>());
+    }
 
-            player.GetComponent<CrosshairGUI>().enabled = false;
+    void PauseControl(Behaviour control)
+    {
+        if (control == null || !control.enabled) return;
+        pausedControls.Add(control);
+        control.enabled = false;
+    }
 
-            player.GetComponent<PlayerController>().enabled = false;
+    void HideNote()
+    {
+        note.enabled = false;
+        foreach (var control in pausedControls)
+            if (control != null) control.enabled = true;
+        pausedControls.Clear();
+    }
 
-            camera.GetComponent<HeadBob>().enabled = false;
-        }
-
-        void HideNote()
-        {
-            note.enabled = false;
-
-            player.GetComponent<MouseLook>().enabled = true;
-            camera.GetComponent<MouseLook>().enabled = true;
-
-            player.GetComponent<CrosshairGUI>().enabled = true;
-
-            player.GetComponent<PlayerController>().enabled = true;
-
-            camera.GetComponent<HeadBob>().enabled = true;
-        }
+    void OnDisable()
+    {
+        if (note != null && note.enabled) HideNote();
     }
 }

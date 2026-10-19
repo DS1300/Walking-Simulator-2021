@@ -9,6 +9,11 @@ namespace WalkingSimulator.Presentation
         public const string Prefix = "WalkingSimulator.";
         static GamePreferences instance;
         public static float Volume { get { return PlayerPrefs.GetFloat(Prefix + "Volume", 1f); } }
+        public static void SetVolume(float value)
+        {
+            AudioListener.volume = Mathf.Clamp01(value);
+            PlayerPrefs.SetFloat(Prefix + "Volume", AudioListener.volume);
+        }
         public static float Sensitivity { get { return PlayerPrefs.GetFloat("Sensitivity", 5f); } }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

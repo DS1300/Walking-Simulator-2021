@@ -11,6 +11,7 @@ namespace WalkingSimulator.Presentation
         public float wheelRadius = .45f;
         private Vector3[] startingPositions;
         private float distance;
+        private float windDistance;
 
         void Start()
         {
@@ -22,6 +23,8 @@ namespace WalkingSimulator.Presentation
         {
             if (PlayerPrefs.GetInt(GamePreferences.Prefix + "ReducedMotion", 0) == 1) return;
             float travel = speed * Time.unscaledDeltaTime;
+            windDistance += travel;
+            Shader.SetGlobalVector("_CTI_WindPositionOffset", transform.TransformVector(Vector3.forward * windDistance));
             distance = Mathf.Repeat(distance + travel, sectionLength * roadSections.Length);
             for (int i = 0; i < roadSections.Length; i++)
             {
@@ -31,6 +34,11 @@ namespace WalkingSimulator.Presentation
             }
             foreach (var wheel in wheels)
                 if (wheel != null) wheel.Rotate(Vector3.right, travel / Mathf.Max(.1f, wheelRadius) * Mathf.Rad2Deg, Space.Self);
+        }
+
+        void OnDisable()
+        {
+            Shader.SetGlobalVector("_CTI_WindPositionOffset", Vector4.zero);
         }
     }
 }
