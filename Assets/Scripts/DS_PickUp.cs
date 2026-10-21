@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class DS_PickUp : MonoBehaviour
     public bool picked;
     private GameObject player;
     private new GameObject camera;
-    
+
     private void Start()
     {
         player = GameObject.Find("Player X");
@@ -18,24 +19,23 @@ public class DS_PickUp : MonoBehaviour
 
     private void Update()
     {
-            if (Input.GetKey("r") && !canpick)
-            {            
-                var rotationX = Input.GetAxis("Mouse X") * 10;
-                var rotationY = Input.GetAxis("Mouse Y") * 10;
+        if (Input.GetKey("r") && !canpick)
+        {
+            var rotationX = Input.GetAxis("Mouse X") * 10;
+            var rotationY = Input.GetAxis("Mouse Y") * 10;
 
-                this.transform.RotateAroundLocal(Destination.up, -Mathf.Deg2Rad * rotationX);
-                this.transform.RotateAroundLocal(Destination.right, Mathf.Deg2Rad * rotationY);
+            transform.Rotate(Destination.up, -rotationX, Space.Self);
+            transform.Rotate(Destination.right, rotationY, Space.Self);
 
-                player.GetComponent<MouseLook>().enabled = false;
-                camera.GetComponent<MouseLook>().enabled = false;
-            }
+            player.GetComponent<MouseLook>().enabled = false;
+            camera.GetComponent<MouseLook>().enabled = false;
+        }
 
         if (Input.GetKeyUp("r"))
         {
             player.GetComponent<MouseLook>().enabled = true;
             camera.GetComponent<MouseLook>().enabled = true;
         }
-
     }
 
     void OnMouseDown()
@@ -52,7 +52,6 @@ public class DS_PickUp : MonoBehaviour
         this.transform.parent = null;
         GetComponent<Rigidbody>().useGravity = true;
         picked = false;
-        canpick = true;     
+        canpick = true;
     }
-       
 }

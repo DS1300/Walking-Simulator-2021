@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,11 +23,16 @@ public class Bible1 : MonoBehaviour
     [SerializeField] ParticleSystem FireEmbers3 = null;
     [SerializeField] ParticleSystem FireEmbers4 = null;
     [SerializeField] ParticleSystem FireEmbers5 = null;
+    public AudioClip fireIgnition;
+    public AudioClip fireCrackling;
+    [Range(0f, 1f)] public float fireVolume = .55f;
+    public WalkingSimulator.Presentation.SpatialEnvironmentAudio fireSound;
 
     void Start()
     {
         player = GameObject.Find("Player X");
         camera = GameObject.Find("Main Camera");
+
     }
 
     void Update()
@@ -52,7 +57,9 @@ public class Bible1 : MonoBehaviour
                 FireEmbers3.Play();
                 FireEmbers4.Play();
                 FireEmbers5.Play();
+                if (fireSound != null) fireSound.Activate();
             }
         }
     }
 }
+

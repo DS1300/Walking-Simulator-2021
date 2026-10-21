@@ -1,0 +1,86 @@
+Sound effect sources
+Verified against source pages on 20 October 2026.
+
+Prepared footstep edits: isolated steps, mono conversion, edge fades and level adjustment.
+Environment edits: mono conversion, trimming, level adjustment and loop crossfades where applicable.
+
+Freesound - 01-21 Footsteps, sneakers on gravel and leaves.wav by SpliceSound
+Author: SpliceSound
+Source: https://freesound.org/people/SpliceSound/sounds/218304/
+License: http://creativecommons.org/publicdomain/zero/1.0/
+
+Freesound - footsteps - wood 01.wav by Anthousai
+Author: Anthousai
+Source: https://freesound.org/people/Anthousai/sounds/398780/
+License: http://creativecommons.org/publicdomain/zero/1.0/
+
+Freesound - owl.wav by Anthousai
+Author: Anthousai
+Source: https://freesound.org/people/Anthousai/sounds/398734/
+License: http://creativecommons.org/publicdomain/zero/1.0/
+
+Freesound - fire-whoosh.wav by hnhnh
+Author: hnhnh
+Source: https://freesound.org/people/hnhnh/sounds/244926/
+License: http://creativecommons.org/publicdomain/zero/1.0/
+
+Freesound - fire_crackling.wav by ceich93
+Author: ceich93
+Source: https://freesound.org/people/ceich93/sounds/263864/
+License: http://creativecommons.org/publicdomain/zero/1.0/
+
+Freesound - fountain01.wav by Adrian_Gomar
+Author: Adrian_Gomar
+Source: https://freesound.org/people/Adrian_Gomar/sounds/202916/
+License: http://creativecommons.org/licenses/by/3.0/
+
+License: http://creativecommons.org/publicdomain/zero/1.0/
+
+Freesound - OBJBook-Blue Snowball Microphone_Comic Book, Page, Turn 02_Nicholas Judy_TDC by designerschoice
+Author: designerschoice
+Source: https://freesound.org/people/designerschoice/sounds/809957/
+License: https://creativecommons.org/licenses/by/4.0/
+
+Freesound - Heavy Door Creaking_05.wav by rambler52
+Author: Rambler52
+Source: https://freesound.org/people/Rambler52/sounds/455324/
+License: http://creativecommons.org/publicdomain/zero/1.0/
+
+Freesound - Forest Night Ambience - Stereo 48kHz 24bit - 2:20 - OWI by neverak
+Author: NeverAk
+Source: https://freesound.org/people/NeverAk/sounds/708611/
+License: http://creativecommons.org/publicdomain/zero/1.0/
+
+Freesound - Crickets At Night - Clean sound by Defelozedd94
+Author: defelozedd94
+Source: https://freesound.org/people/defelozedd94/sounds/522298/
+License: http://creativecommons.org/publicdomain/zero/1.0/
+
+Freesound - Hit wooden object by Avreliy
+Author: Avreliy
+Source: https://freesound.org/people/Avreliy/sounds/580843/
+License: http://creativecommons.org/publicdomain/zero/1.0/
+
+Freesound - Metal falling by xkeril
+Author: xkeril
+Source: https://freesound.org/people/xkeril/sounds/612079/
+License: http://creativecommons.org/publicdomain/zero/1.0/
+
+CreativeCore clips
+Stone: cavestep1.wav through cavestep5.wav.
+Water: waterstep1.wav through waterstep5.wav.
+River waterfall: AmbientWaterfall.wav (mono loop edit).
+Source: user's existing CretiveCore_Audio_U6.3 project, Assets/CreativeCore_Audio/Audio.
+No newer controller, package or spatializer was copied. Retain the original Unity tutorial asset terms.
+
+Freesound - Dripping, Slow, A.wav by InspectorJ
+Author: InspectorJ
+Source: https://freesound.org/people/InspectorJ/sounds/343762/
+License: https://creativecommons.org/licenses/by/4.0/
+
+
+Bat Swarm SFX by Abacagi
+Source: https://freesound.org/people/Abacagi/sounds/483397/
+License: Creative Commons Attribution-NonCommercial 4.0
+https://creativecommons.org/licenses/by-nc/4.0/
+Original recording used without audio edits. Playback volume and pitch vary in-game.

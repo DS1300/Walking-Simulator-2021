@@ -10,6 +10,9 @@ public class Notes : MonoBehaviour
     public TextMeshProUGUI noteBody;
     public NotePage[] pages;
     public TextMeshProUGUI counter;
+    public AudioClip paperOpen;
+    [Range(0f, 1f)] public float paperVolume = .35f;
+    AudioSource audioSource;
     private readonly HashSet<int> collected = new HashSet<int>();
     public bool IsReading { get { return note != null && note.enabled; } }
     public bool IsCollected(int index) { return collected.Contains(index); }
@@ -43,6 +46,10 @@ public class Notes : MonoBehaviour
         player = GameObject.Find("Player X");
         playerCamera = GameObject.Find("Main Camera");
         note.enabled = false;
+        if (paperOpen == null) paperOpen = Resources.Load<AudioClip>("Audio/paperOpen");
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.spatialBlend = 0f;
         RefreshCounter();
     }
 
@@ -80,6 +87,8 @@ public class Notes : MonoBehaviour
         noteTitle.text = page.title;
         noteBody.text = page.text;
         note.enabled = true;
+        if (paperOpen != null)
+            audioSource.PlayOneShot(paperOpen, paperVolume * WalkingSimulator.Presentation.AudioPreferences.SfxVolume);
 
         PauseControl(player.GetComponent<MouseLook>());
         PauseControl(playerCamera.GetComponent<MouseLook>());
@@ -110,3 +119,4 @@ public class Notes : MonoBehaviour
         if (note != null && note.enabled) HideNote();
     }
 }
+

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bible2 : MonoBehaviour
 {
+    public WalkingSimulator.Presentation.SpatialEnvironmentAudio fountainSound;
     public bool activateState = false;
     public List<GameObject> objectsToActivate;
     private bool canActivate = false;
@@ -90,6 +91,7 @@ public class Bible2 : MonoBehaviour
             WaterLeak2.Play();
             WaterLeak3.Play();
             WaterLeak4.Play();
+            if (fountainSound != null) fountainSound.Activate();
 
             StartCoroutine(WaitBeforeDoing());
 

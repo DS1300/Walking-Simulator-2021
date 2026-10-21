@@ -80,7 +80,7 @@ public class PlayerMovement : InterpolatedTransform
         {
             if(forceGravity)
                 moveDirection.y -= gravity * Time.deltaTime;
-            grounded = (controller.Move(moveDirection * Time.deltaTime) & CollisionFlags.Below) != 0;
+            grounded = HasGroundSupport(controller.Move(moveDirection * Time.deltaTime));
         }
     }
 
@@ -116,7 +116,7 @@ public class PlayerMovement : InterpolatedTransform
         // Apply gravity
         moveDirection.y -= gravity * Time.deltaTime;
         // Move the controller, and set grounded true or false depending on whether we're standing on something
-        grounded = (controller.Move(moveDirection * Time.deltaTime) & CollisionFlags.Below) != 0; 
+        grounded = HasGroundSupport(controller.Move(moveDirection * Time.deltaTime)); 
     }
 
     public void Move(Vector3 direction, float speed, float appliedGravity)
@@ -136,7 +136,7 @@ public class PlayerMovement : InterpolatedTransform
 
         UpdateJump();
 
-        grounded = (controller.Move(moveDirection * Time.deltaTime) & CollisionFlags.Below) != 0;
+        grounded = HasGroundSupport(controller.Move(moveDirection * Time.deltaTime));
     }
 
     public void Move(Vector3 direction, float speed, float appliedGravity, float setY)
@@ -157,7 +157,7 @@ public class PlayerMovement : InterpolatedTransform
 
         UpdateJump();
 
-        grounded = (controller.Move(moveDirection * Time.deltaTime) & CollisionFlags.Below) != 0;
+        grounded = HasGroundSupport(controller.Move(moveDirection * Time.deltaTime));
     }
 
     public void Jump(Vector3 dir, float mult)
@@ -191,6 +191,21 @@ public class PlayerMovement : InterpolatedTransform
         moveDirection = direction * speed;
     }
 
+    bool HasGroundSupport(CollisionFlags flags)
+    {
+        if ((flags & CollisionFlags.Below) != 0)
+            return true;
+        if (controller == null || !controller.enabled || moveDirection.y > 0f)
+            return false;
+
+        Bounds bounds = controller.bounds;
+        float radius = Mathf.Max(.05f, controller.radius * .8f);
+        float distance = bounds.extents.y - radius + controller.stepOffset + .12f;
+        RaycastHit groundHit;
+        return Physics.SphereCast(bounds.center, radius, Vector3.down, out groundHit,
+            distance, ~0, QueryTriggerInteraction.Ignore) &&
+            groundHit.collider != controller && groundHit.normal.y > .25f;
+    }
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         contactPoint = hit.point;
