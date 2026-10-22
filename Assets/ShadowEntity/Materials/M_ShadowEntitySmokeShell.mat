@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_ShadowEntitySmokeShell
+  m_Shader: {fileID: -6465566751694194690, guid: ed3fd0e17a06b0a48ada4df8897d8e96,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - _Dissolve: 0
+    - _Glitch: 0
+    - _GlitchIntensity: 1
+    - _NoiseScale: 5
+    - _NoiseSpeed: 0.3
+    - _Opacity: 1
+    - _ShellOpacity: 0.7
+    - _ShellThickness: 0.045
+    m_Colors:
+    - _EdgeColor: {r: 0.15, g: 0.185, b: 0.235, a: 1}
+    - _SmokeColor: {r: 0.02, g: 0.022, b: 0.028, a: 1}

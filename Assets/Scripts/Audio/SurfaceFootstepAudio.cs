@@ -15,6 +15,7 @@ namespace WalkingSimulator.Presentation
 
         public float walkInterval = .48f;
         public float runInterval = .32f;
+        [Min(.1f)] public float crouchStepDistance = 1.55f;
 
         [Range(0f, 1f)]
         public float volume = .55f;
@@ -79,6 +80,12 @@ namespace WalkingSimulator.Presentation
             }
 
             Vector3 velocity = controller.velocity;
+            if (player != null && player.status == Status.climbingLadder)
+            {
+                source.Stop();
+                progress = 0f;
+                return;
+            }
             float speed = new Vector2(velocity.x, velocity.z).magnitude;
 
             bool walking = player == null || (player.enabled &&
@@ -109,9 +116,12 @@ namespace WalkingSimulator.Presentation
                 )
             );
 
-            progress += Time.deltaTime *
-                Mathf.Min(1f, speed / Mathf.Max(.1f, walkSpeed)) /
-                Mathf.Max(.1f, interval);
+            if (player != null && player.status == Status.crouching)
+                progress += speed * Time.deltaTime / Mathf.Max(.1f, crouchStepDistance);
+            else
+                progress += Time.deltaTime *
+                    Mathf.Min(1f, speed / Mathf.Max(.1f, walkSpeed)) /
+                    Mathf.Max(.1f, interval);
 
             if (progress < 1f)
                 return;

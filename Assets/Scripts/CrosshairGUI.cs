@@ -18,6 +18,7 @@ public class CrosshairGUI : MonoBehaviour
     private Rect m_crosshairRect;
     private Ray playerAim;
     private Camera playerCam;
+    private TowerShadowEncounter towerEncounter;
 
     void Update()
     {
@@ -106,8 +107,14 @@ public class CrosshairGUI : MonoBehaviour
        
     }
 
+    void OnEnable()
+    {
+        Update();
+    }
+
     void Awake()
     {
+        towerEncounter = FindObjectOfType<TowerShadowEncounter>();
         if (m_DefaultReticle)
         {
             m_crosshairRect = new Rect((Screen.width - m_crosshairTexture.width) / 2,
@@ -128,7 +135,8 @@ public class CrosshairGUI : MonoBehaviour
 
     void OnGUI()
     {
-        if (Time.timeScale == 0f) return;
+        if (Time.timeScale == 0f || ShadowEncounterView.InUse ||
+            (towerEncounter != null && towerEncounter.ControlsCamera)) return;
         m_crosshairRect.x = (Screen.width - m_crosshairRect.width) / 2;
         m_crosshairRect.y = (Screen.height - m_crosshairRect.height) / 2;
         if (locked && m_lockTexture != null)

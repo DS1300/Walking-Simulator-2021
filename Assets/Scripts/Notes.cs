@@ -14,12 +14,16 @@ public class Notes : MonoBehaviour
     [Range(0f, 1f)] public float paperVolume = .35f;
     AudioSource audioSource;
     private readonly HashSet<int> collected = new HashSet<int>();
+    public event System.Action<int, bool> NoteClosed;
+    int openNoteIndex = -1;
+    bool openedInWorld;
+
     public bool IsReading { get { return note != null && note.enabled; } }
     public bool IsCollected(int index) { return collected.Contains(index); }
 
     public void OpenCollectedNote(int index)
     {
-        if (index >= 0 && index < pages.Length && IsCollected(index)) ShowNote(pages[index]);
+        if (index >= 0 && index < pages.Length && IsCollected(index)) ShowNote(pages[index], false);
     }
 
     public void CloseNote() { HideNote(); }
@@ -73,15 +77,17 @@ public class Notes : MonoBehaviour
             {
                 if (page.noteObject != null && hit.transform.IsChildOf(page.noteObject.transform))
                 {
-                    ShowNote(page);
+                    ShowNote(page, true);
                     break;
                 }
             }
         }
     }
 
-    void ShowNote(NotePage page)
+    void ShowNote(NotePage page, bool inWorld)
     {
+        openNoteIndex = System.Array.IndexOf(pages, page);
+        openedInWorld = inWorld;
         collected.Add(System.Array.IndexOf(pages, page));
         RefreshCounter();
         noteTitle.text = page.title;
@@ -108,10 +114,14 @@ public class Notes : MonoBehaviour
 
     void HideNote()
     {
+        bool wasReading = IsReading;
         note.enabled = false;
         foreach (var control in pausedControls)
             if (control != null) control.enabled = true;
         pausedControls.Clear();
+        if (wasReading && NoteClosed != null)
+            NoteClosed(openNoteIndex, openedInWorld);
+        openNoteIndex = -1;
     }
 
     void OnDisable()
