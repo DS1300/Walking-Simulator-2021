@@ -21,6 +21,10 @@ public class GrabRotate : MonoBehaviour
     private CollisionDetectionMode oldCollisionMode;
     private readonly List<Collider[]> ignoredCollisions = new List<Collider[]>();
 
+    // Read-only state used by the contextual tutorial.
+    public bool IsHolding { get { return grabbedobjects != null; } }
+    public bool IsRotating { get { return rotating; } }
+
     void Start()
     {
         playerCam = Camera.main;

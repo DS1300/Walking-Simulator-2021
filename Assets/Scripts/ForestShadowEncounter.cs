@@ -16,13 +16,16 @@ public class ForestShadowEncounter : MonoBehaviour
     public bool alreadyThere = true;
     public bool smokeManifestation = true;
     public bool optionalRareEncounter = true;
-    [Range(0f, 1f)] public float rareProbability = .25f;
+
+    [Range(0f, 1f)]
+    public float rareProbability = .25f;
+
     public float encounterCooldown = 60f;
-    public int maximumEncounters = 3;
+    public int maximumEncounters = 2;
     public int randomSeed = 137;
 
-    [Tooltip("Zero-based marker indices: Position 5, then 1, 2, 3, 4.")]
-    public int[] encounterOrder = { 4, 0, 1, 2, 3 };
+    [Tooltip("Zero-based marker indices: Position 5, then Position 1.")]
+    public int[] encounterOrder = { 4, 0 };
 
     public float unavailableMarkerTimeout = 35f;
     public float encounterTimeout = 18f;
@@ -37,15 +40,10 @@ public class ForestShadowEncounter : MonoBehaviour
     public LayerMask obstructionMask = ~0;
     public Transform[] vegetationRoots;
 
-    [Header("Bridge Crossing")]
-    public bool bridgeCrossing = true;
-    public Transform bridgeMarker;
-    public Transform bridgeStart;
-    public Transform bridgeEnd;
-    [Min(.5f)] public float bridgeCrossingDuration = 2f;
-
     [Header("Normal Glitch")]
-    [Range(0f, 1f)] public float glitchIntensity = .35f;
+    [Range(0f, 1f)]
+    public float glitchIntensity = .35f;
+
     public float glitchDuration = .6f;
 
     [Header("Audio")]
@@ -56,12 +54,13 @@ public class ForestShadowEncounter : MonoBehaviour
 
     System.Random random;
     Terrain[] terrains;
+
     readonly RaycastHit[] sightHits = new RaycastHit[64];
 
     int encounters;
     int orderIndex;
+
     bool running;
-    bool bridgeRunning;
     bool discovered;
 
     float nextSelection;
@@ -69,9 +68,14 @@ public class ForestShadowEncounter : MonoBehaviour
 
     Coroutine forestRoutine;
     Coroutine stingWatch;
+
     TowerShadowEncounter tower;
 
-    public bool IsActive { get { return running; } }
+    public bool IsActive
+    {
+        get { return running; }
+    }
+
     public Collider[] sightIgnoredColliders;
 
     void Start()
@@ -108,7 +112,9 @@ public class ForestShadowEncounter : MonoBehaviour
             if (Mathf.Abs(p.x) < half.x &&
                 Mathf.Abs(p.y) < half.y &&
                 Mathf.Abs(p.z) < half.z)
+            {
                 return true;
+            }
         }
 
         if (spawnMarkers != null)
@@ -117,7 +123,9 @@ public class ForestShadowEncounter : MonoBehaviour
             {
                 if (marker != null &&
                     Vector3.Distance(position, marker.position) <= maximumDistance)
+                {
                     return true;
+                }
             }
         }
 
@@ -134,7 +142,9 @@ public class ForestShadowEncounter : MonoBehaviour
         for (int i = 1; i < samples; i++)
         {
             Vector3 point = Vector3.Lerp(
-                origin, target, (float)i / samples
+                origin,
+                target,
+                (float)i / samples
             );
 
             foreach (var terrain in terrains)
@@ -145,13 +155,19 @@ public class ForestShadowEncounter : MonoBehaviour
                 Vector3 local = point - terrain.transform.position;
                 Vector3 size = terrain.terrainData.size;
 
-                if (local.x < 0f || local.z < 0f ||
-                    local.x > size.x || local.z > size.z)
+                if (local.x < 0f ||
+                    local.z < 0f ||
+                    local.x > size.x ||
+                    local.z > size.z)
+                {
                     continue;
+                }
 
                 if (terrain.SampleHeight(point) +
                     terrain.transform.position.y > point.y + .05f)
+                {
                     return true;
+                }
             }
         }
 
@@ -163,11 +179,15 @@ public class ForestShadowEncounter : MonoBehaviour
         if (hit.collider is TerrainCollider ||
             hit.transform.IsChildOf(actor.entity.transform) ||
             hit.collider.GetComponentInParent<PlayerController>() != null)
+        {
             return false;
+        }
 
         if (sightIgnoredColliders != null &&
             System.Array.IndexOf(sightIgnoredColliders, hit.collider) >= 0)
+        {
             return false;
+        }
 
         if (vegetationRoots != null)
         {
@@ -233,8 +253,10 @@ public class ForestShadowEncounter : MonoBehaviour
         Vector3 screen = playerCamera.WorldToViewportPoint(point);
 
         return screen.z > 0f &&
-               screen.x > -margin && screen.x < 1f + margin &&
-               screen.y > -margin && screen.y < 1f + margin;
+               screen.x > -margin &&
+               screen.x < 1f + margin &&
+               screen.y > -margin &&
+               screen.y < 1f + margin;
     }
 
     bool Observed()
@@ -245,7 +267,8 @@ public class ForestShadowEncounter : MonoBehaviour
         return delta.magnitude <= maximumDistance &&
                InFrame(point) &&
                Vector3.Angle(
-                   playerCamera.transform.forward, delta
+                   playerCamera.transform.forward,
+                   delta
                ) <= Mathf.Min(
                    gazeAngle,
                    playerCamera.fieldOfView * .45f
@@ -271,9 +294,12 @@ public class ForestShadowEncounter : MonoBehaviour
             encounters >= maximumEncounters ||
             !InsideForest() ||
             Time.time < nextSelection)
+        {
             return;
+        }
 
-        nextSelection = Time.time + Mathf.Max(.1f, selectionInterval);
+        nextSelection =
+            Time.time + Mathf.Max(.1f, selectionInterval);
 
         int index = encounterOrder[orderIndex];
 
@@ -289,14 +315,9 @@ public class ForestShadowEncounter : MonoBehaviour
         Vector3 target = marker.position + Vector3.up * .8f;
 
         float distance = Vector3.Distance(
-            playerCamera.transform.position, target
+            playerCamera.transform.position,
+            target
         );
-
-        if (bridgeCrossing && marker == bridgeMarker)
-        {
-            AdvanceMarker();
-            return;
-        }
 
         if (distance > maximumDistance)
         {
@@ -324,14 +345,18 @@ public class ForestShadowEncounter : MonoBehaviour
 
         markerWait += Mathf.Max(.1f, selectionInterval);
 
-        if (markerWait >= Mathf.Max(5f, unavailableMarkerTimeout))
+        if (markerWait >=
+            Mathf.Max(5f, unavailableMarkerTimeout))
         {
             AdvanceMarker();
             return;
         }
 
-        if (distance < minimumDistance || !ClearView(target))
+        if (distance < minimumDistance ||
+            !ClearView(target))
+        {
             return;
+        }
 
         bool idle = alreadyThere && !InFrame(target, .2f);
         bool smoke = smokeManifestation && InFrame(target);
@@ -377,7 +402,8 @@ public class ForestShadowEncounter : MonoBehaviour
         discovered = false;
 
         entityPosition.SetPositionAndRotation(
-            marker.position, marker.rotation
+            marker.position,
+            marker.rotation
         );
 
         actor.Face(playerCamera.transform);
@@ -389,7 +415,8 @@ public class ForestShadowEncounter : MonoBehaviour
             float wait = 0f;
 
             while (wait < 4f &&
-                   (!Available() || InFrame(actor.lookTarget.position)))
+                   (!Available() ||
+                    InFrame(actor.lookTarget.position)))
             {
                 if (Available())
                     wait += Time.deltaTime;
@@ -410,7 +437,10 @@ public class ForestShadowEncounter : MonoBehaviour
             else
             {
                 actor.entity.ResetToIdle();
-                stingWatch = StartCoroutine(WatchSting(0f));
+
+                stingWatch = StartCoroutine(
+                    WatchSting(0f)
+                );
             }
         }
         else
@@ -476,163 +506,11 @@ public class ForestShadowEncounter : MonoBehaviour
 
         AdvanceMarker();
 
-        nextSelection = Time.time +
-            Mathf.Max(1f, encounterCooldown);
+        nextSelection =
+            Time.time + Mathf.Max(1f, encounterCooldown);
 
         running = false;
         forestRoutine = null;
-    }
-
-    // Bridge encounters have priority over regular forest encounters.
-    public bool TryStartBridge()
-    {
-        if (!bridgeCrossing ||
-            bridgeRunning ||
-            !Available() ||
-            actor == null ||
-            entityPosition == null ||
-            bridgeStart == null ||
-            bridgeEnd == null)
-            return false;
-
-        // Cancel an ordinary forest apparition if it conflicts with
-        // the dedicated bridge crossing. Preserve its marker progress.
-        if (running)
-        {
-            if (forestRoutine == null)
-                return false;
-
-            StopCoroutine(forestRoutine);
-            forestRoutine = null;
-
-            if (stingWatch != null)
-            {
-                StopCoroutine(stingWatch);
-                stingWatch = null;
-            }
-
-            actor.HideImmediately();
-            running = false;
-        }
-
-        running = true;
-        bridgeRunning = true;
-
-        StartCoroutine(BridgeEncounter());
-        return true;
-    }
-
-    IEnumerator BridgeEncounter()
-    {
-        discovered = false;
-
-        entityPosition.position = bridgeStart.position;
-
-        // Do not play the smoke manifestation here.
-        // Reveal the physical creature before starting FinalLunge.
-        yield return actor.ActivateHidden();
-
-        actor.entity.ResetToIdle();
-
-        // Allow the Animator to apply its visible Idle state.
-        yield return null;
-
-        stingWatch = StartCoroutine(WatchSting(0f));
-
-        yield return CrossBridge();
-
-        if (stingWatch != null)
-        {
-            StopCoroutine(stingWatch);
-            stingWatch = null;
-        }
-
-        // Disappear only after reaching the destination.
-        yield return actor.Disappear(disappearSfx);
-
-        actor.entity.gameObject.SetActive(false);
-
-        nextSelection = Time.time +
-            Mathf.Max(1f, encounterCooldown);
-
-        bridgeRunning = false;
-        running = false;
-    }
-
-    IEnumerator CrossBridge()
-    {
-        Vector3 start = entityPosition.position;
-        Vector3 destination = bridgeEnd.position;
-
-        Vector3 direction = destination - start;
-        direction.y = 0f;
-
-        if (direction.sqrMagnitude < .01f)
-            yield break;
-
-        actor.entity.transform.rotation =
-            Quaternion.LookRotation(direction);
-
-        Animator animator =
-            actor.entity.GetComponent<Animator>();
-
-        int glitchLayer = -1;
-        float previousGlitchWeight = 0f;
-        bool previousRootMotion = false;
-
-        if (animator != null)
-        {
-            glitchLayer = animator.GetLayerIndex("Glitch");
-
-            if (glitchLayer >= 0)
-            {
-                previousGlitchWeight =
-                    animator.GetLayerWeight(glitchLayer);
-
-                // Prevent glitch overlay during the crossing.
-                animator.SetLayerWeight(glitchLayer, 0f);
-            }
-
-            previousRootMotion = animator.applyRootMotion;
-            animator.applyRootMotion = false;
-        }
-
-        actor.entity.PlayFinalLunge();
-
-        float elapsed = 0f;
-        float duration = Mathf.Max(.5f, bridgeCrossingDuration);
-
-        while (elapsed < duration)
-        {
-            if (Available())
-            {
-                elapsed += Time.deltaTime;
-
-                float t = Mathf.SmoothStep(
-                    0f,
-                    1f,
-                    Mathf.Clamp01(elapsed / duration)
-                );
-
-                entityPosition.position =
-                    Vector3.Lerp(start, destination, t);
-            }
-
-            yield return null;
-        }
-
-        entityPosition.position = destination;
-
-        if (animator != null)
-        {
-            animator.applyRootMotion = previousRootMotion;
-
-            if (glitchLayer >= 0)
-                animator.SetLayerWeight(
-                    glitchLayer,
-                    previousGlitchWeight
-                );
-        }
     }
 
     void OnDisable()
@@ -644,7 +522,6 @@ public class ForestShadowEncounter : MonoBehaviour
 
         forestRoutine = null;
         stingWatch = null;
-        bridgeRunning = false;
         running = false;
     }
 }
