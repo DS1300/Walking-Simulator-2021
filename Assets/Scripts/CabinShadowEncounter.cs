@@ -11,6 +11,7 @@ public class CabinShadowEncounter : MonoBehaviour
     public bool guidedLook = true;
     public bool facePlayer = true;
     public Collider[] windowColliders;
+    public CandleExtinguishSequence candles;
 
     [Header("Timing")]
     public float cameraTurnDuration = .9f;
@@ -51,14 +52,17 @@ public class CabinShadowEncounter : MonoBehaviour
     IEnumerator Encounter()
     {
         if (facePlayer) actor.Face(view.viewCamera.transform);
+        if (candles != null) candles.Play();
         if (guidedLook) yield return view.LookAt(actor.lookTarget, cameraTurnDuration);
         Coroutine discovery = StartCoroutine(DiscoverySting());
+        ShadowPresenceEffect.Begin(this);
         yield return actor.Appear(appearSfx, actor.appearDuration);
         yield return new WaitForSeconds(idleHold);
         yield return actor.HeadTilt(headTiltSfx, headTiltHold);
         yield return actor.Glitch(aggressiveGlitchSfx, true,
             aggressiveGlitchIntensity, aggressiveGlitchDuration);
         StopCoroutine(discovery);
+        ShadowPresenceEffect.End(this);
         yield return actor.Disappear(disappearSfx);
         view.Release();
     }

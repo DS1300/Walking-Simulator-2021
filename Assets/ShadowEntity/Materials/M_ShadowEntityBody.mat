@@ -31,7 +31,7 @@ Material:
     - _NoiseScale: 5
     - _NoiseSpeed: 0.3
     - _Opacity: 1
-    - _SmokeBreakup: 0.65
+    - _SmokeBreakup: 0
     - _Smoothness: 0.12
     m_Colors:
     - _EdgeColor: {r: 0.15, g: 0.185, b: 0.235, a: 1}

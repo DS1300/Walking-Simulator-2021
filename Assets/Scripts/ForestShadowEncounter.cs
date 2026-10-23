@@ -48,6 +48,10 @@ public class ForestShadowEncounter : MonoBehaviour
 
     [Header("Audio")]
     public EncounterSound encounterHorrorSting = new EncounterSound();
+
+    [Tooltip("Optional sting per spawn marker (same index as Spawn Markers). An empty clip uses Encounter Horror Sting.")]
+    public EncounterSound[] markerStings;
+
     public EncounterSound appearSfx = new EncounterSound();
     public EncounterSound normalGlitchSfx = new EncounterSound();
     public EncounterSound disappearSfx = new EncounterSound();
@@ -65,6 +69,8 @@ public class ForestShadowEncounter : MonoBehaviour
 
     float nextSelection;
     float markerWait;
+
+    Transform currentMarker;
 
     Coroutine forestRoutine;
     Coroutine stingWatch;
@@ -388,7 +394,8 @@ public class ForestShadowEncounter : MonoBehaviour
         {
             if (Available() && Observed())
             {
-                actor.sounds.PlaySting(encounterHorrorSting);
+                actor.sounds.PlaySting(CurrentSting());
+                ShadowPresenceEffect.Begin(this);
                 discovered = true;
                 yield break;
             }
@@ -397,9 +404,26 @@ public class ForestShadowEncounter : MonoBehaviour
         }
     }
 
+    EncounterSound CurrentSting()
+    {
+        int index = System.Array.IndexOf(spawnMarkers, currentMarker);
+
+        if (markerStings != null &&
+            index >= 0 &&
+            index < markerStings.Length &&
+            markerStings[index] != null &&
+            markerStings[index].clip != null)
+        {
+            return markerStings[index];
+        }
+
+        return encounterHorrorSting;
+    }
+
     IEnumerator Haunt(Transform marker, bool idle)
     {
         discovered = false;
+        currentMarker = marker;
 
         entityPosition.SetPositionAndRotation(
             marker.position,
@@ -497,6 +521,8 @@ public class ForestShadowEncounter : MonoBehaviour
             stingWatch = null;
         }
 
+        ShadowPresenceEffect.End(this);
+
         yield return actor.Disappear(disappearSfx);
 
         actor.entity.gameObject.SetActive(false);
@@ -516,6 +542,7 @@ public class ForestShadowEncounter : MonoBehaviour
     void OnDisable()
     {
         StopAllCoroutines();
+        ShadowPresenceEffect.End(this);
 
         if (actor != null)
             actor.HideImmediately();

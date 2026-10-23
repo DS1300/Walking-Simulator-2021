@@ -23,6 +23,7 @@ namespace WalkingSimulator.Presentation
         public static bool AudioSettingsOpen { get; private set; }
         public TMP_FontAsset bodyFont;
         public string gameScene = "The Game";
+        public OpeningStory openingStory;
 
         [SerializeField] GameObject ui, home, settings, confirmation;
         [SerializeField] TMP_Text status, resolutionText, fullscreenText, qualityText, confirmText;
@@ -77,7 +78,7 @@ namespace WalkingSimulator.Presentation
             var scaler = ui.GetComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1920, 1080);
-            scaler.matchWidthOrHeight = .5f;
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
 
             if (FindObjectOfType<EventSystem>() == null)
                 new GameObject("Event System", typeof(EventSystem), typeof(StandaloneInputModule));
@@ -651,6 +652,12 @@ namespace WalkingSimulator.Presentation
 
             foreach (var button in home.GetComponentsInChildren<Button>())
                 button.interactable = false;
+
+            if (openingStory != null)
+            {
+                openingStory.Begin(gameScene);
+                yield break;
+            }
 
             status.text = "Entering the cemetery...";
             yield return null;

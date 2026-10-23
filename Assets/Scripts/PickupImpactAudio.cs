@@ -8,6 +8,9 @@ namespace WalkingSimulator.Presentation
         public AudioClip[] impacts;
         [Range(0f, 1f)] public float volume = .55f;
         public float minimumVelocity = 1.1f;
+        [Tooltip("Optional handling sound played by GrabRotate when the object is picked up.")]
+        public AudioClip[] pickups;
+        [Range(0f, 1f)] public float pickupVolume = .45f;
         AudioSource source;
         float lastImpact;
 
@@ -25,6 +28,13 @@ namespace WalkingSimulator.Presentation
             lastImpact = Time.time;
             source.pitch = Random.Range(.94f, 1.06f);
             source.PlayOneShot(impacts[Random.Range(0, impacts.Length)], volume * Mathf.Clamp01(collision.relativeVelocity.magnitude / 6f) * AudioPreferences.SfxVolume);
+        }
+
+        public void PlayPickup()
+        {
+            if (pickups == null || pickups.Length == 0) return;
+            source.pitch = Random.Range(.96f, 1.04f);
+            source.PlayOneShot(pickups[Random.Range(0, pickups.Length)], pickupVolume * AudioPreferences.SfxVolume);
         }
     }
 }

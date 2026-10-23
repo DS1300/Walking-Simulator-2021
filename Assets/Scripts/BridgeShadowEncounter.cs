@@ -147,6 +147,8 @@ public class BridgeShadowEncounter : MonoBehaviour
         if (audioSource != null && horrorSting != null)
             audioSource.PlayOneShot(horrorSting);
 
+        ShadowPresenceEffect.Begin(this);
+
         float elapsed = 0f;
         float duration = Mathf.Max(0.5f, crossingDuration);
 
@@ -166,6 +168,8 @@ public class BridgeShadowEncounter : MonoBehaviour
         }
 
         entity.position = end;
+
+        ShadowPresenceEffect.End(this);
 
         // The creature only dissolves after completing the crossing.
         if (animator != null)

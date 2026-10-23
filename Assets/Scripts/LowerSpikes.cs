@@ -14,6 +14,13 @@ public class LowerSpikes : MonoBehaviour
     public Animator lever;
     public Animator spikes;
 
+    [Header("Audio")]
+    public WalkingSimulator.Presentation.SfxAudioSource leverAudio;
+    public AudioClip leverSound;
+    public WalkingSimulator.Presentation.SfxAudioSource spikesAudio;
+    public AudioClip spikesSound;
+    private float leverSoundEnd, spikesSoundEnd;
+
     void Start()
     {
         player = GameObject.Find("Player X");
@@ -31,6 +38,7 @@ public class LowerSpikes : MonoBehaviour
             if ((hit.collider.gameObject.tag == "Lever") && Input.GetMouseButtonDown(0))
             {
                 lever.Play("Lever");
+                leverSoundEnd = PlayOnce(leverAudio, leverSound, leverSoundEnd);
 
                 StartCoroutine(WaitBeforeDoing());
             }
@@ -41,6 +49,15 @@ public class LowerSpikes : MonoBehaviour
             yield return new WaitForSeconds(3);
 
             spikes.Play("Spikes");
+            spikesSoundEnd = PlayOnce(spikesAudio, spikesSound, spikesSoundEnd);
         }
+    }
+
+    // Repeated clicks restart the animations; the sound is not stacked while it is still playing.
+    float PlayOnce(WalkingSimulator.Presentation.SfxAudioSource source, AudioClip clip, float end)
+    {
+        if (source == null || clip == null || Time.time < end) return end;
+        source.Play(clip);
+        return Time.time + clip.length;
     }
 }

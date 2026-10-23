@@ -1,0 +1,319 @@
+WALKING SIMULATOR - DOWNLOADED ASSETS AND AUDIO INVENTORY
+Environmental audio, props and interaction polish pass, 2026-10-23
+Unity 2019.4.4f1 / URP 7.3.1 / Scene: Assets/Scenes/The Game.unity
+
+All assets below were downloaded during this pass. Every one is CC0 (public domain dedication):
+no attribution is legally required, commercial use and modification are allowed.
+Licenses were checked on each asset's own source page at download time.
+
+License links
+- Poly Haven: CC0 1.0 - https://polyhaven.com/license (https://creativecommons.org/publicdomain/zero/1.0/)
+- Freesound (CC0 sounds): CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+Existing Poly Haven license notice: Assets/Texture Maps/Poly Haven/LICENSE.txt
+
+Common modifications
+- Poly Haven models: downloaded as glTF (1K textures), meshes joined, decimated in Blender 5.1, pivot set to
+  bottom centre, exported as FBX. The ARM texture (AO/roughness/metal) was converted into a Unity
+  MetallicSmoothness map (R = metal, A = 1 - roughness). Albedo and OpenGL normal maps are unchanged copies.
+  In Unity: URP/Lit material, MeshFilter/MeshRenderer, Box or Sphere collider, Rigidbody (mass 1) for pickups,
+  tag Interact, PickupImpactAudio.
+- Freesound sounds: trimmed, converted to mono 16-bit WAV, short fades, peak-normalised to -1 dBFS with ffmpeg.
+  Unity import: Force To Mono, Decompress On Load, PCM.
+
+======================================================================
+3D MODELS (with their textures)
+======================================================================
+
+ASSET NAME: Wooden Crate 01 (wooden_crate_01)
+TYPE: 3D Model + Textures (albedo, normal, metallic/smoothness) + Material
+AUTHOR: James Ray Cock
+SOURCE: Poly Haven - https://polyhaven.com/a/wooden_crate_01
+LICENSE: CC0 1.0 - https://polyhaven.com/license
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Models/Wooden Chest Crate/Wooden Chest Crate.fbx
+            Assets/Texture Maps/Poly Haven/Wooden Chest Crate/ (Albedo.jpg, Normal.jpg, MetallicSmoothness.png)
+            Assets/Presentation/Wooden Chest Crate.mat
+            Assets/Prefabs/Props/Wooden Chest Crate.prefab
+SCENE USAGE: Pickup Objects/Start Area - Wooden Chest Crate (beside the first ladder, next to the kept barrel)
+PURPOSE: Pickable environmental prop; impacts reuse the existing Wooden Barrel Impact 1-7 clips
+MODIFICATIONS: Renamed, decimated 6576 -> 2500 triangles, lid and latch joined to the body, pivot at bottom,
+               box collider, rigidbody, PickupImpactAudio
+
+ASSET NAME: Wooden Crate 02 (wooden_crate_02)
+TYPE: 3D Model + Textures + Material
+AUTHOR: James Ray Cock, Jurita Burger
+SOURCE: Poly Haven - https://polyhaven.com/a/wooden_crate_02
+LICENSE: CC0 1.0 - https://polyhaven.com/license
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Models/Wooden Supply Crate/Wooden Supply Crate.fbx
+            Assets/Texture Maps/Poly Haven/Wooden Supply Crate/
+            Assets/Presentation/Wooden Supply Crate.mat
+            Assets/Prefabs/Props/Wooden Supply Crate.prefab
+SCENE USAGE: Environment Props/Cabin (1) Exterior - Wooden Supply Crate (outside the first cabin's east wall)
+PURPOSE: Static decorative prop (too large to carry), base for the toolbox
+MODIFICATIONS: Renamed, decimated 5176 -> 2500 triangles, lid joined, pivot at bottom, box collider, no rigidbody
+
+ASSET NAME: Wooden Bucket 01 (wooden_bucket_01)
+TYPE: 3D Model + Textures + Material
+AUTHOR: James Ray Cock
+SOURCE: Poly Haven - https://polyhaven.com/a/wooden_bucket_01
+LICENSE: CC0 1.0 - https://polyhaven.com/license
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Models/Wooden Pail/Wooden Pail.fbx
+            Assets/Texture Maps/Poly Haven/Wooden Pail/
+            Assets/Presentation/Wooden Pail.mat
+            Assets/Prefabs/Props/Wooden Pail.prefab
+SCENE USAGE: Pickup Objects/Start Area - Wooden Pail (beside the first ladder)
+PURPOSE: Pickable prop; impacts reuse the existing Wooden Barrel Impact clips. Replaces the planned rusty
+         metal bucket (no free metal bucket model with a clear license was found)
+MODIFICATIONS: Renamed, decimated 5116 -> 2500 triangles, handle joined, pivot at bottom, box collider,
+               rigidbody, PickupImpactAudio
+
+ASSET NAME: Rusted Spade 01 (rusted_spade_01)
+TYPE: 3D Model + Textures + Material
+AUTHOR: Blemonade
+SOURCE: Poly Haven - https://polyhaven.com/a/rusted_spade_01
+LICENSE: CC0 1.0 - https://polyhaven.com/license
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Models/Rusted Spade/Rusted Spade.fbx
+            Assets/Texture Maps/Poly Haven/Rusted Spade/
+            Assets/Presentation/Rusted Spade.mat
+            Assets/Prefabs/Props/Rusted Spade.prefab
+SCENE USAGE: Pickup Objects/Graveyard - Rusted Spade (lying on the long grave inside the first graveyard,
+             near the start)
+PURPOSE: Pickable prop (the shovel); impacts reuse the existing Resources/Audio/metalImpact.wav
+MODIFICATIONS: Decimated 11436 -> 2000 triangles, pivot at bottom, box collider, rigidbody, PickupImpactAudio
+
+ASSET NAME: Metal Toolbox (metal_toolbox)
+TYPE: 3D Model + Textures + Material
+AUTHOR: Mateusz Sadek
+SOURCE: Poly Haven - https://polyhaven.com/a/metal_toolbox
+LICENSE: CC0 1.0 - https://polyhaven.com/license
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Models/Metal Toolbox/Metal Toolbox.fbx
+            Assets/Texture Maps/Poly Haven/Metal Toolbox/
+            Assets/Presentation/Metal Toolbox.mat
+            Assets/Prefabs/Props/Metal Toolbox.prefab
+SCENE USAGE: Pickup Objects/Cabin (1) Exterior - Metal Toolbox (on top of the supply crate)
+PURPOSE: Pickable prop; impacts reuse the existing metalImpact.wav
+MODIFICATIONS: Six parts joined (lid, tray, handle, latches), decimated 14228 -> 3000 triangles, pivot at bottom,
+               box collider, rigidbody, PickupImpactAudio
+
+ASSET NAME: Concrete Cat Statue (concrete_cat_statue)
+TYPE: 3D Model + Textures + Material
+AUTHOR: Rico Cilliers, Riley Queen
+SOURCE: Poly Haven - https://polyhaven.com/a/concrete_cat_statue
+LICENSE: CC0 1.0 - https://polyhaven.com/license
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Models/Concrete Cat Statuette/Concrete Cat Statuette.fbx
+            Assets/Texture Maps/Poly Haven/Concrete Cat Statuette/
+            Assets/Presentation/Concrete Cat Statuette.mat
+            Assets/Prefabs/Props/Concrete Cat Statuette.prefab
+SCENE USAGE: Pickup Objects/Cabin Interior - Concrete Cat Statuette (on the table in the first graveyard
+             cabin, the Keeper's Journal second entry cabin)
+PURPOSE: Pickable, inspectable eerie statuette (environmental storytelling, not a quest item); impacts use the
+         Ceramic Jar Impact clips
+MODIFICATIONS: Decimated 11950 -> 3000 triangles, pivot at bottom, box collider, rigidbody, PickupImpactAudio
+
+ASSET NAME: Horse Statue 01 (horse_statue_01)
+TYPE: 3D Model + Textures + Material
+AUTHOR: Rico Cilliers
+SOURCE: Poly Haven - https://polyhaven.com/a/horse_statue_01
+LICENSE: CC0 1.0 - https://polyhaven.com/license
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Models/Porcelain Horse Statuette/Porcelain Horse Statuette.fbx
+            Assets/Texture Maps/Poly Haven/Porcelain Horse Statuette/
+            Assets/Presentation/Porcelain Horse Statuette.mat
+            Assets/Prefabs/Props/Porcelain Horse Statuette.prefab
+SCENE USAGE: Pickup Objects/Cabin (1) Interior - Porcelain Horse Statuette (on the table in Cabin (1),
+             with the camera, key and first journal entry)
+PURPOSE: Pickable, inspectable porcelain figurine; impacts use the Ceramic Jar Impact clips
+MODIFICATIONS: Shape keys removed, decimated 22388 -> 3000 triangles, base material merged into one material,
+               pivot at bottom, box collider, rigidbody, PickupImpactAudio
+
+ASSET NAME: Dirty Football (dirty_football)
+TYPE: 3D Model + Textures + Material
+AUTHOR: Rohit Seervi
+SOURCE: Poly Haven - https://polyhaven.com/a/dirty_football
+LICENSE: CC0 1.0 - https://polyhaven.com/license
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Models/Dirty Child Ball/Dirty Child Ball.fbx
+            Assets/Texture Maps/Poly Haven/Dirty Child Ball/
+            Assets/Presentation/Dirty Child Ball.mat
+            Assets/Prefabs/Props/Dirty Child Ball.prefab
+SCENE USAGE: Pickup Objects/A Mother's Grief - Dirty Child Ball (beside the headstone of the long grave that
+             holds the "A Mother's Grief" note)
+PURPOSE: Personal memorial object for A Mother's Grief. Replaces the planned teddy bear: no free teddy bear with a
+         clear license was found (Unity Asset Store options are paid), and the user asked for any free toy
+MODIFICATIONS: Decimated 19998 -> 7766 triangles, pivot at bottom, sphere collider, rigidbody, PickupImpactAudio
+               (soft sack impact clips at low volume)
+
+======================================================================
+SOUNDS (all from Freesound, all CC0)
+======================================================================
+
+ASSET NAME: Car engine turning off; near.WAV
+TYPE: Sound
+AUTHOR: thomasanthony321
+SOURCE: Freesound - https://freesound.org/people/thomasanthony321/sounds/682767/
+LICENSE: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Audio/SFX/Environment/Car Engine Off.wav
+SCENE USAGE: Stuff/ScifiCar_Prefab (CarArrivalAudio.engineOff)
+PURPOSE: Engine switching off when gameplay begins after the opening story
+MODIFICATIONS: Mono, fades, peak normalised (+22.7 dB)
+
+ASSET NAME: Car Door open and close 3.wav
+TYPE: Sound
+AUTHOR: NachtmahrTV
+SOURCE: Freesound - https://freesound.org/people/NachtmahrTV/sounds/556690/
+LICENSE: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Audio/SFX/Environment/Car Door Open Close.wav
+SCENE USAGE: Stuff/ScifiCar_Prefab (CarArrivalAudio.carDoor)
+PURPOSE: Car door opening and closing after the engine stops
+MODIFICATIONS: Trimmed 0.12-5.25 s, mono, fades, peak normalised
+
+ASSET NAME: Pulling a lever.mp3
+TYPE: Sound
+AUTHOR: A_Kuha
+SOURCE: Freesound - https://freesound.org/people/A_Kuha/sounds/676412/
+LICENSE: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Audio/SFX/Interactions/Cabin Lever.wav (mixed with lever.wav below)
+SCENE USAGE: 'Graveyard 2 '/lever (LowerSpikes.leverSound)
+PURPOSE: Final cabin lever pull, timed to the 2 s lever animation
+MODIFICATIONS: One pull cut (7.80-8.85 s), mono, mixed with the lever.wav clunk at 1.75 s, limited
+
+ASSET NAME: lever.wav
+TYPE: Sound
+AUTHOR: Krokulator
+SOURCE: Freesound - https://freesound.org/people/Krokulator/sounds/696746/
+LICENSE: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+ATTRIBUTION REQUIRED: No
+UNITY PATH: part of Assets/Audio/SFX/Interactions/Cabin Lever.wav and Assets/Audio/SFX/Environment/Cabin Spikes.wav
+SCENE USAGE: 'Graveyard 2 '/lever and 'Graveyard 2 '/spikes_fence
+PURPOSE: Lever end-stop clunk; pitched down as the spikes' final stop
+MODIFICATIONS: Mono, peak normalised, mixed into the two clips above (pitched to 70% for the spikes)
+
+ASSET NAME: Foley_Mechanism_Wheel_Moderate_Rusty_Loop_Mono.wav
+TYPE: Sound
+AUTHOR: Nox_Sound
+SOURCE: Freesound - https://freesound.org/people/Nox_Sound/sounds/559470/
+LICENSE: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Audio/SFX/Environment/Cabin Spikes.wav
+SCENE USAGE: 'Graveyard 2 '/spikes_fence (LowerSpikes.spikesSound)
+PURPOSE: Rusty mechanism while the spikes lower (3 s animation), ends with a heavy stop
+MODIFICATIONS: First 3.3 s, fade in 0.15 s, fade out 0.45 s, mixed with the pitched lever clunk at 2.85 s
+
+ASSET NAME: 080122- vase A rolling and drops 000.clip 0001.wav / 0002.wav
+TYPE: Sound (2 files)
+AUTHOR: martian
+SOURCE: Freesound - https://freesound.org/people/martian/sounds/335888/
+        Freesound - https://freesound.org/people/martian/sounds/335887/
+LICENSE: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Audio/SFX/Impacts/Ceramic Jar Impact 1.wav (335888)
+            Assets/Audio/SFX/Impacts/Ceramic Jar Impact 2.wav (335887, 0.40-1.10 s)
+SCENE USAGE: Pickup Objects/FloralGoldJar (the vase), Concrete Cat Statuette, Porcelain Horse Statuette (PickupImpactAudio)
+PURPOSE: Ceramic impact when the vase or a statuette lands
+MODIFICATIONS: Trimmed, mono, fades, peak normalised
+
+ASSET NAME: Film Camera Click Shutter
+TYPE: Sound
+AUTHOR: drewtait
+SOURCE: Freesound - https://freesound.org/people/drewtait/sounds/676375/
+LICENSE: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Audio/SFX/Interactions/Camera Handling.wav
+SCENE USAGE: Pickup Objects/CameraModel (Cabin (1)) (PickupImpactAudio.pickups)
+PURPOSE: Film-advance and shutter click when the player picks up the camera
+MODIFICATIONS: Trimmed 0.05-1.25 s (wind and first click), mono, peak normalised
+
+ASSET NAME: Bag Of Flour Dropped On Counter Top.wav
+TYPE: Sound
+AUTHOR: bbrocer
+SOURCE: Freesound - https://freesound.org/people/bbrocer/sounds/382642/
+LICENSE: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Audio/SFX/Impacts/Sack Impact 1.wav ... Sack Impact 4.wav
+SCENE USAGE: Pickup Objects/Coffee_Sack, Coffee_Sack (1), Coffee_Sack (2) impacts; Dirty Child Ball and Newspaper (low volume)
+PURPOSE: Heavy sack landing on the ground
+MODIFICATIONS: Four drops cut into separate 0.5 s clips, mono, fades, peak normalised
+
+ASSET NAME: TELV 152 Burlap Bag Rustles.mp3
+TYPE: Sound
+AUTHOR: mf_gloom
+SOURCE: Freesound - https://freesound.org/people/mf_gloom/sounds/517849/
+LICENSE: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Audio/SFX/Interactions/Sack Pickup 1.wav, Sack Pickup 2.wav
+SCENE USAGE: Pickup Objects/Coffee_Sack, Coffee_Sack (1), Coffee_Sack (2) (PickupImpactAudio.pickups)
+PURPOSE: Burlap rustle when a coffee sack is picked up
+MODIFICATIONS: Two rustles cut (0.50-1.30 s, 2.27-3.02 s), mono, fades, peak normalised
+
+ASSET NAME: Candle flicker/ blown out x4
+TYPE: Sound
+AUTHOR: peridactyloptrix
+SOURCE: Freesound - https://freesound.org/people/peridactyloptrix/sounds/204531/
+LICENSE: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Audio/SFX/Environment/Candle Out 1.wav, Candle Out 2.wav, Candle Out 3.wav
+SCENE USAGE: Atmosphere Polish/Chapel Candle Sequence and Atmosphere Polish/Cabin Candle Sequence
+             (CandleExtinguishSequence.extinguishSounds)
+PURPOSE: Soft puff as each candle pair goes out
+MODIFICATIONS: Three puffs cut, mono, fades, peak normalised (played at volume 0.35)
+
+ASSET NAME: 04_Extinguishing of candle.wav
+TYPE: Sound
+AUTHOR: 16FThumaF
+SOURCE: Freesound - https://freesound.org/people/16FThumaF/sounds/499020/
+LICENSE: CC0 1.0 - https://creativecommons.org/publicdomain/zero/1.0/
+ATTRIBUTION REQUIRED: No
+UNITY PATH: Assets/Audio/SFX/Environment/Candle Out 4.wav
+SCENE USAGE: Chapel and Cabin Candle Sequences (fourth variation)
+PURPOSE: Candle extinguishing variation
+MODIFICATIONS: Trimmed 5.05-6.75 s, mono, fades, peak normalised
+
+======================================================================
+DOWNLOADED BUT NOT IMPORTED (kept outside the project in C:\Claude\downloads)
+======================================================================
+- WoodenChair_01 (Poly Haven, Jake Mobley, CC0) - https://polyhaven.com/a/WoodenChair_01
+  Not used: an ornate gothic throne, wrong for an abandoned cabin.
+- painted_wooden_chair_02 (Poly Haven, Kirill Sannikov, CC0) - https://polyhaven.com/a/painted_wooden_chair_02
+  Imported as Broken Wooden Chair, then removed from the project at the user's request (the existing cabin
+  chairs were made pickable instead).
+- Gate-Heavy-OpenClose-WAV.wav (Freesound, Omnisis, CC0) - https://freesound.org/people/Omnisis/sounds/336888/
+  Not used: the recording is clipped (constant 0 dBFS peaks).
+- Ceramic Plate Impacts (Freesound, dbstein, CC0) - https://freesound.org/people/dbstein/sounds/700856/
+  Not used: the cut hits were too noisy after normalising.
+- Candle flame flickers, blown out (Freesound, DeqstersLab, CC0) - https://freesound.org/people/DeqstersLab/sounds/826338/
+  Not used: the other candle recordings were a better fit.
+
+======================================================================
+SUMMARY
+======================================================================
+Total audio files downloaded: 15 (11 used, 4 not imported). 17 edited clips imported into Unity.
+Total 3D models downloaded: 10 (8 used, 2 not in the project).
+Total textures downloaded: 30 (3 per model: diffuse, OpenGL normal, ARM). 24 used, converted into 8 albedo,
+  8 normal and 8 MetallicSmoothness maps.
+
+Existing assets reused without downloading:
+- Wooden Barrel Impact 1-7.ogg (Assets/Audio/SFX/Impacts) for the Wooden Chest Crate and Wooden Pail.
+- Resources/Audio/metalImpact.wav for the Rusted Spade, Metal Toolbox, CameraModel impacts and the Crown.
+- Resources/Audio/paperOpen.wav as the Newspaper pickup sound.
+- Existing PickupImpactAudio, GrabRotate, SfxAudioSource, LowerSpikes and CandleExtinguishSequence systems.
+- The three existing cabin chairs (polySurface28 in Cabin, Cabin (1), Cabin (2)) were made pickable, reusing the
+  Wooden Barrel Impact clips. All pickable objects are grouped under the scene root "Pickup Objects".
+- Existing barrels (5), (7), (8) were moved from the start area to cabin exteriors instead of being deleted.
+
+Planned assets not obtained, and why:
+- Wheelbarrow: no free model with a clear license was found (Poly Haven has none; Unity Asset Store and other
+  marketplace options are paid or have unclear licenses).
+- Teddy bear: no free model with a clear license was found; replaced by the Dirty Child Ball (user decision).
+- Rusty metal bucket: no free model found; replaced by the Wooden Pail.
+- Padlock material: the scene has no padlock objects, so this item was skipped (user decision).
+- Glass impact sound for the whisky bottles: not downloaded; the bottles keep their current behaviour.
+
+No asset with an unverified source, author or license was imported.

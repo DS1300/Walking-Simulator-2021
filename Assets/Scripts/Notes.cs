@@ -20,6 +20,7 @@ public class Notes : MonoBehaviour
 
     public bool IsReading { get { return note != null && note.enabled; } }
     public bool IsCollected(int index) { return collected.Contains(index); }
+    public int CollectedCount { get { return collected.Count; } }
 
     public void OpenCollectedNote(int index)
     {
@@ -121,6 +122,9 @@ public class Notes : MonoBehaviour
         pausedControls.Clear();
         if (wasReading && NoteClosed != null)
             NoteClosed(openNoteIndex, openedInWorld);
+        // A collected note leaves the world; it can still be reread from the journal.
+        if (wasReading && openedInWorld && isActiveAndEnabled && pages[openNoteIndex].noteObject != null)
+            pages[openNoteIndex].noteObject.SetActive(false);
         openNoteIndex = -1;
     }
 

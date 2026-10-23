@@ -14,6 +14,7 @@ public class ChapelFinalEncounter : MonoBehaviour
     public ShadowEncounterActor actor;
     public ShadowEncounterView view;
     public EncounterSilence silence;
+    public CandleExtinguishSequence candles;
     public PauseMenu pauseMenu;
     public TextMeshProUGUI interactionPrompt;
     public CanvasGroup blackScreen;
@@ -84,14 +85,47 @@ public class ChapelFinalEncounter : MonoBehaviour
     // Original Shadow Entity Appear animation duration.
     const float NormalAppearDuration = 2f;
 
+    [Header("Coffin Prompt")]
+    public string respectsText = "Pay your respects";
+    public string readyKeyText = "E — ";
+
+    [Tooltip("{0} = collected notes, {1} = total notes.")]
+    public string progressText = "Notes collected: {0}/{1}";
+
+    [Tooltip("{0} = collected notes, {1} = total notes.")]
+    public string completeText = "All notes collected: {0}/{1}";
+
+    [Header("Coffin Highlight")]
+    public Renderer[] coffinHighlight;
+
+    [Range(0f, 2f)]
+    public float highlightIntensity = .5f;
+
+    [Min(.01f)]
+    public float highlightFadeDuration = .25f;
+
     bool played;
     bool canReturn;
     bool pauseWasEnabled;
     bool pauseCaptured;
 
+    int shownCount = -1;
+    bool shownReady;
+    float highlight;
+    MaterialPropertyBlock highlightBlock;
+
     void Start()
     {
         actor.HideImmediately();
+
+        if (coffinHighlight != null)
+        {
+            foreach (var highlightRenderer in coffinHighlight)
+            {
+                if (highlightRenderer != null)
+                    highlightRenderer.enabled = false;
+            }
+        }
 
         blackScreen.alpha = 0f;
         endingTitleGroup.alpha = 0f;
@@ -138,37 +172,21 @@ public class ChapelFinalEncounter : MonoBehaviour
 
         interactionPrompt.enabled = false;
 
-        if (played ||
-            PauseMenu.paused ||
-            Time.timeScale <= 0f ||
-            ShadowEncounterView.InUse ||
-            journal == null ||
-            journal.IsReading ||
-            !AllNotesCollected())
-        {
+        bool targeted = CoffinTargeted();
+
+        UpdateHighlight(targeted);
+
+        if (!targeted)
             return;
-        }
 
-        Ray ray = view.viewCamera.ViewportPointToRay(
-            new Vector3(.5f, .5f, 0f)
-        );
+        // The prompt always shows note progress; E only works once all notes are collected.
+        bool ready = AllNotesCollected();
 
-        RaycastHit hit;
-
-        if (!Physics.Raycast(
-                ray,
-                out hit,
-                interactionDistance,
-                ~0,
-                QueryTriggerInteraction.Ignore) ||
-            !hit.transform.IsChildOf(coffin))
-        {
-            return;
-        }
-
+        ShowPrompt(ready);
         interactionPrompt.enabled = true;
 
-        if (!Input.GetKeyDown(interactionKey) ||
+        if (!ready ||
+            !Input.GetKeyDown(interactionKey) ||
             !view.TakeControl())
         {
             return;
@@ -178,6 +196,84 @@ public class ChapelFinalEncounter : MonoBehaviour
         interactionPrompt.enabled = false;
 
         StartCoroutine(Ending());
+    }
+
+    bool CoffinTargeted()
+    {
+        if (played ||
+            PauseMenu.paused ||
+            Time.timeScale <= 0f ||
+            ShadowEncounterView.InUse ||
+            journal == null ||
+            journal.IsReading)
+        {
+            return false;
+        }
+
+        Ray ray = view.viewCamera.ViewportPointToRay(
+            new Vector3(.5f, .5f, 0f)
+        );
+
+        RaycastHit hit;
+
+        return Physics.Raycast(
+                   ray,
+                   out hit,
+                   interactionDistance,
+                   ~0,
+                   QueryTriggerInteraction.Ignore) &&
+               hit.transform.IsChildOf(coffin);
+    }
+
+    void ShowPrompt(bool ready)
+    {
+        int count = journal.CollectedCount;
+
+        if (count == shownCount && ready == shownReady)
+            return;
+
+        shownCount = count;
+        shownReady = ready;
+
+        int total = journal.pages.Length;
+
+        string progress = string.Format(
+            count >= total ? completeText : progressText,
+            count,
+            total
+        );
+
+        interactionPrompt.text =
+            (ready ? readyKeyText : "") + respectsText +
+            "\n<size=75%>" + progress + "</size>";
+    }
+
+    void UpdateHighlight(bool visible)
+    {
+        float target = visible ? 1f : 0f;
+
+        if (coffinHighlight == null || highlight == target)
+            return;
+
+        highlight = Mathf.MoveTowards(
+            highlight,
+            target,
+            Time.unscaledDeltaTime / highlightFadeDuration
+        );
+
+        if (highlightBlock == null)
+            highlightBlock = new MaterialPropertyBlock();
+
+        highlightBlock.SetFloat("_Intensity", highlight * highlightIntensity);
+
+        foreach (var highlightRenderer in coffinHighlight)
+        {
+            if (highlightRenderer == null)
+                continue;
+
+            highlightRenderer.SetPropertyBlock(highlightBlock);
+            highlightRenderer.enabled = highlight > 0f;
+        }
     }
 
     IEnumerator Ending()
@@ -198,6 +294,10 @@ public class ChapelFinalEncounter : MonoBehaviour
 
         yield return new WaitForSeconds(coffinHold);
 
+        // The candles go out pair by pair while the player turns toward the entrance.
+        if (candles != null)
+            candles.Play();
+
         // Slowly turn toward the chapel entrance.
         yield return view.LookAt(
             entranceLookTarget,
@@ -209,6 +309,8 @@ public class ChapelFinalEncounter : MonoBehaviour
 
         if (facePlayer)
             actor.Face(view.viewCamera.transform);
+
+        ShadowPresenceEffect.Begin(this);
 
         // Play the ORIGINAL, full-length smoke appearance.
         // Do not use the accelerated 0.35-second version.

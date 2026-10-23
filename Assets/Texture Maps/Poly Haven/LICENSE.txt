@@ -1,0 +1,2 @@
+Textures from Poly Haven (polyhaven.com), license CC0 1.0 (public domain).
+castle_wall_slates by Rob Tuytel, monastery_stone_floor by Amal Kumar. 2K JPG, OpenGL normal maps.

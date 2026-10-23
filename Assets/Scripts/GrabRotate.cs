@@ -76,6 +76,8 @@ public class GrabRotate : MonoBehaviour
         body.maxAngularVelocity = 3f;
         body.interpolation = RigidbodyInterpolation.Interpolate;
         body.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        var pickupAudio = body.GetComponent<WalkingSimulator.Presentation.PickupImpactAudio>();
+        if (pickupAudio != null) pickupAudio.PlayPickup();
         foreach (var held in body.GetComponentsInChildren<Collider>())
             foreach (var player in GetComponentsInChildren<Collider>())
                 if (held != player && !Physics.GetIgnoreCollision(held, player))

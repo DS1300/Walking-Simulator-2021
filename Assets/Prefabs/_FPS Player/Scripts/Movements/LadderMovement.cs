@@ -108,7 +108,7 @@ public class LadderMovement : MovementType
         float landingY = activeLadder.upperLanding.position.y;
         if (enteringFromTop || steppingOff)
         {
-            if (Mathf.Abs(input.y) < .02f)
+            if (enteringFromTop && Mathf.Abs(input.y) < .02f)
             {
                 movement.Move(Vector3.zero, 1f, 0f);
                 return;
@@ -127,15 +127,15 @@ public class LadderMovement : MovementType
             return;
         }
 
-        if (!activeLadder.NearFace(body.center, player.info.radius))
-        {
-            LeaveTowerLadder();
-            return;
-        }
-        if (input.y > .02f && body.min.y >= landingY + .03f)
+        if (input.y >= -.02f && body.min.y >= landingY + .03f)
         {
             steppingOff = true;
             movement.Move(Vector3.zero, 1f, 0f);
+            return;
+        }
+        if (!activeLadder.NearFace(body.center, player.info.radius))
+        {
+            LeaveTowerLadder();
             return;
         }
         if (input.y < -.02f && movement.grounded &&

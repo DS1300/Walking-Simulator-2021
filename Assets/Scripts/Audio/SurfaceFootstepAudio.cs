@@ -217,6 +217,11 @@ namespace WalkingSimulator.Presentation
             if (Contains(stoneSurfaces, hit.collider))
                 return Choose("Stone", stone);
 
+            string surfaceName = hit.collider.gameObject.name;
+            if (surfaceName == "Battlement" ||
+                surfaceName.StartsWith("Battlement (", StringComparison.Ordinal))
+                return Choose("Stone", stone);
+
             var terrain = hit.collider.GetComponent<Terrain>();
 
             if (terrain != null)

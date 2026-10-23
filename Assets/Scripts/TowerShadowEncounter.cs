@@ -310,6 +310,8 @@ public class TowerShadowEncounter : MonoBehaviour
             sounds.PlayStingWhenSeen(encounterHorrorSting, playerCamera,
                 cameraFocus, entity.transform);
 
+        ShadowPresenceEffect.Begin(this);
+
         yield return new WaitForSeconds(revealHold);
 
         entity.SetLookUp(true);
@@ -342,6 +344,7 @@ public class TowerShadowEncounter : MonoBehaviour
 
         if (sounds != null) sounds.Play(disappearSfx);
         entity.PlayDisappear();
+        ShadowPresenceEffect.End(this);
 
         yield return new WaitForSeconds(disappearHold);
 

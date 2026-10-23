@@ -12,6 +12,7 @@ public class CameraZoom : MonoBehaviour
 	
 	private float targetFOV;
 	private float baseFOV;
+	private float baseLodBias = -1f;
 	
 	void Start ()
 	{
@@ -35,6 +36,32 @@ public class CameraZoom : MonoBehaviour
 	private void UpdateZoom()
 	{
 		GetComponent<Camera>().fieldOfView = Mathf.Lerp(GetComponent<Camera>().fieldOfView, targetFOV, zoomSpeed * Time.deltaTime);
+		KeepLodWhileZoomed(GetComponent<Camera>().fieldOfView);
+	}
+
+	// Zooming makes trees and grass bigger on screen, which would switch them to more detailed LODs (branches
+	// popping in). Scaling the LOD bias with the zoom keeps the LODs they had before zooming.
+	private void KeepLodWhileZoomed(float fov)
+	{
+		if (fov >= baseFOV - 0.01f)
+		{
+			RestoreLodBias();
+			return;
+		}
+		if (baseLodBias < 0f) baseLodBias = QualitySettings.lodBias;
+		QualitySettings.lodBias = baseLodBias * Mathf.Tan(fov * 0.5f * Mathf.Deg2Rad) / Mathf.Tan(baseFOV * 0.5f * Mathf.Deg2Rad);
+	}
+
+	private void RestoreLodBias()
+	{
+		if (baseLodBias < 0f) return;
+		QualitySettings.lodBias = baseLodBias;
+		baseLodBias = -1f;
+	}
+
+	void OnDisable()
+	{
+		RestoreLodBias();
 	}
 	
 	public void SetBaseFOV(float fov)
