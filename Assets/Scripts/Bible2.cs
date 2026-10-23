@@ -49,12 +49,25 @@ public class Bible2 : MonoBehaviour
     }
 
 
+    bool IsAimedAt()
+    {
+        Camera cam = Camera.main;
+        if (cam == null || PauseMenu.paused || Time.timeScale <= 0f) return false;
+        CrosshairGUI crosshair = FindObjectOfType<CrosshairGUI>();
+        float range = crosshair != null ? crosshair.RayLength : 3f;
+        RaycastHit hit;
+        if (!Physics.Raycast(cam.ViewportPointToRay(new Vector3(.5f, .5f, 0f)), out hit, range))
+            return false;
+        return hit.collider.GetComponentInParent<Bible2>() == this;
+    }
+
     void Update()
     {
         if (objectRendererToChange != null && resetTime != 0f && resetTime < Time.time)
         {
             objectRendererToChange.material = startColour;
         }
+        TryActivate();
         if (canActivate)
         {
             activateState = !activateState;
@@ -73,9 +86,9 @@ public class Bible2 : MonoBehaviour
 
 
     }
-    private void OnTriggerStay(Collider other)
+    private void TryActivate()
     {
-        if (!activated && Input.GetMouseButtonDown(0))
+        if (!activated && Input.GetMouseButtonDown(0) && IsAimedAt())
         {
             activated = true;
             canActivate = true;
@@ -118,13 +131,13 @@ public class Bible2 : MonoBehaviour
                     control.enabled = false;
                 }
             }
-            yield return LookAt(fountainView, 1.5f);
+            yield return LookAt(fountainView, 2.5f);
             yield return new WaitForSeconds(3.5f);
         }
         else yield return new WaitForSeconds(5);
 
         anim.Play("Graveyard Gate", 0, 0f);
-        if (watching) yield return LookAt(gateView, 1.9f);
+        if (watching) yield return LookAt(gateView, 2.8f);
         yield return null;
         while (anim.GetCurrentAnimatorStateInfo(0).IsName("Graveyard Gate") &&
             anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
@@ -136,11 +149,11 @@ public class Bible2 : MonoBehaviour
     {
         Quaternion start = viewCamera.transform.rotation;
         float startFov = viewCamera.fieldOfView;
-        float endFov = target == fountainView ? fountainFieldOfView : originalFieldOfView;
+        float endFov = originalFieldOfView;
         Vector3 startPosition = viewCamera.transform.position;
         Vector3 endPosition = target == fountainView && fountainCameraPosition != null
             ? fountainCameraPosition.position
-            : viewCamera.transform.parent.TransformPoint(cameraLocalPosition);
+            : startPosition;
         Quaternion end = Quaternion.LookRotation(target.position - endPosition);
         float elapsed = 0f;
         while (elapsed < duration)
@@ -149,7 +162,11 @@ public class Bible2 : MonoBehaviour
             float t = Mathf.Clamp01(elapsed / duration);
             float eased = t * t * t * (t * (t * 6f - 15f) + 10f);
             viewCamera.fieldOfView = Mathf.Lerp(startFov, endFov, eased);
-            viewCamera.transform.position = Vector3.Lerp(startPosition, endPosition, eased);
+            Vector3 desiredPosition = Vector3.Lerp(startPosition, endPosition, eased);
+            Vector3 displacement = desiredPosition - viewCamera.transform.position;
+            displacement.y = 0f;
+            CharacterController body = player.GetComponent<CharacterController>();
+            if (body != null && body.enabled) body.Move(displacement);
             viewCamera.transform.rotation = Quaternion.Slerp(start, end, eased);
             yield return null;
         }

@@ -383,7 +383,7 @@ public class TowerShadowEncounter : MonoBehaviour
         }
         else
         {
-            direction = stairExit.forward;
+            direction = stairExit.position + stairExit.forward * forwardStepDistance - capsule.transform.position;
         }
 
         direction.y = 0f;
@@ -398,9 +398,10 @@ public class TowerShadowEncounter : MonoBehaviour
             yield break;
         }
 
+        float destinationDistance = direction.magnitude;
         direction.Normalize();
 
-        float wantedDistance = forwardStepDistance;
+        float wantedDistance = forwardStepTarget == null ? destinationDistance : forwardStepDistance;
 
         // An optional marker specifies the exact destination.
         if (forwardStepTarget != null)
