@@ -515,8 +515,10 @@ public class TowerShadowEncounter : MonoBehaviour
             bounds.center.z + displacement.z
         );
 
-        int count = Physics.RaycastNonAlloc(
+        float supportRadius = Mathf.Max(.05f, Mathf.Min(bounds.extents.x, bounds.extents.z) * .75f);
+        int count = Physics.SphereCastNonAlloc(
             origin,
+            supportRadius,
             Vector3.down,
             groundHits,
             1.35f,
